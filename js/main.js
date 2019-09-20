@@ -5,7 +5,7 @@ var OFFER_TITLES = ['сдам квартиру', 'уютная квартира'
 var TYPES = ['palace', 'flat', 'house', 'bungalo'];
 var CHECKIN = ['12:00', '13:00', '14:00'];
 var CHECKOUT = ['12:00', '13:00', '14:00'];
-var FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
+var FEATURES = ['wifi', 'dishwasher', 'parking', 'conditioner', 'washer', 'elevator'];
 var DESCRIIPTIONS = ['есть парковка рядом с домом', 'можно с животными но без детей', 'можно с детьми но без животных', 'можно только одним животным или только одним детям', 'воды нет но рядом есть магазин'];
 var PHOTOS = ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg'];
 // получение DOM элементов
@@ -13,14 +13,16 @@ var map = document.querySelector('.map');
 var mapPins = document.querySelector('.map__pins');
 var templatePpin = document.querySelector('#pin').content;
 var pin = templatePpin.querySelector('.map__pin');
+var templateCard = document.querySelector('#card').content;
+var cardAd = templateCard.querySelector('.map__card');
 
 // функция получения рандомного элемента из массива
 var getRandomElement = function (arr) {
-  return arr[Math.floor(Math.random() * (0 - arr.length)) + arr.length];
+  return arr[Math.floor(Math.random() * (0 - arr.length) + arr.length)];
 };
 // функция получения рандомгного числа в заданном интервале
 var getRandomNumber = function (from, to) {
-  return Math.floor(Math.random() * (to - from) + from);
+  return Math.floor(Math.random() * (to - from + 1) + from);
 };
 // функция генерации рандомного массива из заданного массива
 var getRandomArray = function (arr) {
@@ -93,3 +95,47 @@ var render = function (element, pasteElements) {
 };
 render(mapPins, getSimilarAds(ads));
 
+var getDrawAd = function (element) {
+  var cloneCard = cardAd.cloneNode(true);
+  var popupTitle = cloneCard.querySelector('.popup__title');
+  var popupAddress = cloneCard.querySelector('.popup__text--address');
+  var popupPrice = cloneCard.querySelector('.popup__text--price');
+  var popupType = cloneCard.querySelector('.popup__type');
+  var popupCapacity = cloneCard.querySelector('.popup__text--capacity');
+  var popupCheckTime = cloneCard.querySelector('.popup__text--time');
+  var popupFeatures = cloneCard.querySelector('.popup__features');
+  var popupDescription = cloneCard.querySelector('.popup__description');
+  var popupPhotos = cloneCard.querySelector('.popup__photos');
+  var typeOfHouse = '';
+  switch(element.offer.type) {
+    case 'bungalo':
+      typeOfHouse = 'Бунгало';
+      break;
+    case 'palace':
+      typeOfHouse = 'Дворец';
+      break;
+    case 'house':
+      typeOfHouse = 'Дом';
+      break;
+    case 'flat':
+      typeOfHouse = 'Квартира';
+      break;  
+  }
+  var wifi = popupFeatures.querySelector('.popup__feature--wifi');
+  var dishwasher = popupFeatures.querySelector('.popup__feature--wifi');
+  var parking = popupFeatures.querySelector('.popup__feature--parking');
+  var washer = popupFeatures.querySelector('.popup__feature--washer');
+  var elevator = popupFeatures.querySelector('.popup__feature--elevator');
+  var dishwasher = popupFeatures.querySelector('.popup__feature--dishwasher');
+  console.log(dishwasher);
+
+  popupTitle.textContent = element.offer.title;
+  popupAddress.textContent = element.offer.address;
+  popupPrice.firstChild.data = element.offer.price + '&#x20bd;';
+  popupType.textContent = typeOfHouse;
+  popupCapacity.textContent = element.offer.rooms + ' комнат(а)ы для ' + element.offer.guests + ' гост(я)ей';
+  popupCheckTime.textContent = 'Заезд после ' + element.offer.checkin + ', выезд до ' + element.offer.checkout;
+  console.log(element.offer.features);
+  return cloneCard;
+};
+console.log(getDrawAd(ads[0]));
