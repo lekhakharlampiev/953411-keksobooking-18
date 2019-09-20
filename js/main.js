@@ -72,8 +72,8 @@ map.classList.remove('map--faded');
 var getDrawPin = function (element) {
     var clonePin = pin.cloneNode(true);
     var img = clonePin.querySelector('img');
-    clonePin.style.left = element.location.x + 'px';
-    clonePin.style.top = element.location.y + 'px';
+    clonePin.style.left = element.location.x + 25+ 'px';
+    clonePin.style.top = element.location.y + 70 + 'px';
     img.src = element.author.avatar;
     img.alt = element.offer.title;
     return clonePin;
