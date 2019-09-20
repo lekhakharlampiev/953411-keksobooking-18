@@ -58,13 +58,14 @@ var makeSimilarAd = function () {
 };
 // генерация массива с объктами данных
 var generateAds = function (count) {
-  var ads = [];
+  var arr = [];
   for (var i = 0; i < count; i++) {
-    ads.push(makeSimilarAd());
+    arr.push(makeSimilarAd());
   }
-  return ads;
+  return arr;
 
 };
+var ads = generateAds(8);
 // открываем карту...
 map.classList.remove('map--faded');
 
@@ -90,4 +91,5 @@ var getSimilarAds = function (dataArray) {
 var render = function (element, pasteElements) {
   element.prepend(pasteElements);
 };
-render(mapPins, getSimilarAds(generateAds(8)));
+render(mapPins, getSimilarAds(ads));
+
