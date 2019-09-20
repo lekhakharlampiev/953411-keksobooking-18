@@ -8,6 +8,12 @@ var CHECKOUT = ['12:00', '13:00', '14:00'];
 var FEATURES = ["wifi", "dishwasher", "parking", "washer", "elevator", "conditioner"];
 var DESCRIIPTIONS = ['есть парковка рядом с домом', 'можно с животными но без детей', 'можно с детьми но без животных', 'можно только одним животным или только одним детям', 'воды нет но рядом есть магазин'];
 var PHOTOS = ["http://o0.github.io/assets/images/tokyo/hotel1.jpg", "http://o0.github.io/assets/images/tokyo/hotel2.jpg", "http://o0.github.io/assets/images/tokyo/hotel3.jpg"];
+//получение DOM элементов
+var map = document.querySelector('.map');
+var mapPins = document.querySelector('.map__pins');
+var template_pin = document.querySelector('#pin').content;
+var pin = template_pin.querySelector('.map__pin');
+
 //функция получения рандомного элемента из массива
 var getRandomElement = function (arr) {
     return arr[Math.floor(Math.random() * (0 - arr.length)) + arr.length];
@@ -44,7 +50,7 @@ var makeSimilarAd = function () {
             'photos': getRandomElement(PHOTOS),
         },
         'location': {
-            'x': getRandomNumber(0, 1000),
+            'x': getRandomNumber(0, map.clientWidth),
             'y': getRandomNumber(130, 630)
         }
     };
@@ -59,12 +65,6 @@ var generateAds = function (count) {
     return ads;
 
 };
-
-var map = document.querySelector('.map');
-var mapPins = document.querySelector('.map__pins');
-var template_pin = document.querySelector('#pin').content;
-var pin = template_pin.querySelector('.map__pin');
-
 //открываем карту...
 map.classList.remove('map--faded');
 
