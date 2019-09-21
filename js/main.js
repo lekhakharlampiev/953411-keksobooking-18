@@ -22,14 +22,12 @@ var generatedRandomElement = function (arr) {
 var generatedRandomNumber = function (from, to) {
   return Math.floor(Math.random() * (to - from) + from);
 };
-// функция генерации рандомного массива из заданного массива
+// функция генерации массива случайной длинны из заданного массива
 var generatedRandomArray = function (arr) {
-  var randomArr = [];
-  for (var i = 0; i < generatedRandomNumber(1, arr.length); i++) {
-    randomArr.push(arr[i]);
-  }
+  var randomArr = arr.slice(0, generatedRandomNumber(1, arr.length));
   return randomArr;
 };
+console.log(generatedRandomArray(FEATURES));
 // генерация шаблонного объекта с данными
 var makeSimilarAd = function () {
   var ad = {
@@ -47,7 +45,7 @@ var makeSimilarAd = function () {
       'checkout': generatedRandomElement(CHECKOUT),
       'features': generatedRandomArray(FEATURES),
       'description': generatedRandomElement(DESCRIIPTIONS),
-      'photos': generatedRandomElement(PHOTOS),
+      'photos': generatedRandomArray(PHOTOS),
     },
     'location': {
       'x': generatedRandomNumber(25, map.clientWidth - 25),
