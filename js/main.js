@@ -27,7 +27,6 @@ var generatedRandomArray = function (arr) {
   var randomArr = arr.slice(0, generatedRandomNumber(1, arr.length));
   return randomArr;
 };
-console.log(generatedRandomArray(FEATURES));
 // генерация шаблонного объекта с данными
 var makeSimilarAd = function () {
   var ad = {
