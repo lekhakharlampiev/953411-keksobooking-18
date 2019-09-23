@@ -18,17 +18,10 @@ var cardAd = templateCard.querySelector('.map__card');
 
 // функция получения рандомного элемента из массива
 var getRandomElement = function (arr) {
-<<<<<<< HEAD
-  return arr[Math.floor(Math.random() * (0 - arr.length) + arr.length)];
-};
-// функция получения рандомгного числа в заданном интервале
-var getRandomNumber = function (from, to) {
-=======
   return arr[Math.floor(Math.random() * arr.length)];
 };
 // функция получения рандомгного числа в заданном интервале
 var generatedRandomNumber = function (from, to) {
->>>>>>> 2052b792671f2f6c04acaded8b051012f411fd3b
   return Math.floor(Math.random() * (to - from + 1) + from);
 };
 // функция генерации массива случайной длинны из заданного массива
@@ -119,6 +112,7 @@ var getDrawAd = function (element) {
   var popupFeatures = cloneCard.querySelector('.popup__features');
   var popupDescription = cloneCard.querySelector('.popup__description');
   var popupPhotos = cloneCard.querySelector('.popup__photos');
+
   var typeOfHouse = '';
   switch(element.offer.type) {
     case 'bungalo':
@@ -132,15 +126,25 @@ var getDrawAd = function (element) {
       break;
     case 'flat':
       typeOfHouse = 'Квартира';
-      break;  
+      break;
   }
-  var wifi = popupFeatures.querySelector('.popup__feature--wifi');
-  var dishwasher = popupFeatures.querySelector('.popup__feature--wifi');
-  var parking = popupFeatures.querySelector('.popup__feature--parking');
-  var washer = popupFeatures.querySelector('.popup__feature--washer');
-  var elevator = popupFeatures.querySelector('.popup__feature--elevator');
-  var dishwasher = popupFeatures.querySelector('.popup__feature--dishwasher');
-  console.log(dishwasher);
+  var adFeature = element.offer.features;
+  var allFeatures = popupFeatures.querySelectorAll('.popup__feature');
+
+  var itIncludes = function (arr, elem) {
+    for (var i = 0; i < arr.length; i++) {
+      if (arr[i] === elem) {
+        return true;
+      }
+    }
+    return false;
+  };
+  for (var i = 0; i < allFeatures.length; i++) {
+    var option = allFeatures[i].getAttribute('class').slice(31);
+    if (!itIncludes(adFeature, option)) {
+      allFeatures[i].remove();
+    }
+  }
 
   popupTitle.textContent = element.offer.title;
   popupAddress.textContent = element.offer.address;
@@ -148,7 +152,8 @@ var getDrawAd = function (element) {
   popupType.textContent = typeOfHouse;
   popupCapacity.textContent = element.offer.rooms + ' комнат(а)ы для ' + element.offer.guests + ' гост(я)ей';
   popupCheckTime.textContent = 'Заезд после ' + element.offer.checkin + ', выезд до ' + element.offer.checkout;
-  console.log(element.offer.features);
+
   return cloneCard;
 };
+console.log(ads[0]);
 console.log(getDrawAd(ads[0]));
