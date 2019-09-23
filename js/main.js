@@ -20,7 +20,7 @@ var generatedRandomElement = function (arr) {
 };
 // функция получения рандомгного числа в заданном интервале
 var generatedRandomNumber = function (from, to) {
-  return Math.floor(Math.random() * (to - from) + from);
+  return Math.floor(Math.random() * (to - from + 1) + from);
 };
 // функция генерации массива случайной длинны из заданного массива
 var generatedRandomArray = function (arr) {
