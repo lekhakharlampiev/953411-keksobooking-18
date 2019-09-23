@@ -25,10 +25,13 @@ var generatedRandomNumber = function (from, to) {
 // функция генерации массива случайной длинны из заданного массива
 var generatedRandomArray = function (arr) {
   var randomArr = [];
-  for (var i = 0; i < generatedRandomNumber(1, arr.length + 1); i++) {
-    if (!randomArr.includes(arr[i])) {
-      randomArr.push(arr[i]);
-    }
+  var count = generatedRandomNumber(1, arr.length);
+  var newArr = arr.slice();
+  newArr.sort(function () {
+    return Math.random() - 0.5;
+  });
+  for (var i = 0; i < count; i++) {
+    randomArr.push(newArr[i]);
   }
   return randomArr;
 };
@@ -70,6 +73,7 @@ var generatedAds = function (count) {
 
 };
 var ads = generatedAds(8);
+console.log(ads);
 // открываем карту...
 map.classList.remove('map--faded');
 
