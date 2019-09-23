@@ -24,18 +24,25 @@ var generatedRandomNumber = function (from, to) {
 };
 // функция генерации массива случайной длинны из заданного массива
 var generatedRandomArray = function (arr) {
-  var randomArr = arr.slice(0, generatedRandomNumber(1, arr.length));
+  var randomArr = [];
+  for (var i = 0; i < generatedRandomNumber(1, arr.length + 1); i++) {
+    if (!randomArr.includes(arr[i])) {
+      randomArr.push(arr[i]);
+    }
+  }
   return randomArr;
 };
 // генерация шаблонного объекта с данными
 var makeSimilarAd = function () {
+  var positionX = generatedRandomNumber(25, map.clientWidth - 25);
+  var positionY = generatedRandomNumber(130, 630);
   var ad = {
     'author': {
       'avatar': 'img/avatars/user' + generatedRandomElement(AVATAR_PHOTOS) + '.png'
     },
     'offer': {
       'title': generatedRandomElement(OFFER_TITLES),
-      'address': generatedRandomNumber(100, 1000) + ', ' + generatedRandomNumber(100, 1000),
+      'address': positionX + ', ' + positionY,
       'price': generatedRandomNumber(1000, 10000),
       'type': generatedRandomElement(TYPES),
       'rooms': generatedRandomNumber(1, 6),
@@ -47,8 +54,8 @@ var makeSimilarAd = function () {
       'photos': generatedRandomArray(PHOTOS),
     },
     'location': {
-      'x': generatedRandomNumber(25, map.clientWidth - 25),
-      'y': generatedRandomNumber(130, 630)
+      'x': positionX,
+      'y': positionY
     }
   };
   return ad;
