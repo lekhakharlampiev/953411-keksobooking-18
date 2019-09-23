@@ -18,48 +18,63 @@ var cardAd = templateCard.querySelector('.map__card');
 
 // функция получения рандомного элемента из массива
 var getRandomElement = function (arr) {
+<<<<<<< HEAD
   return arr[Math.floor(Math.random() * (0 - arr.length) + arr.length)];
 };
 // функция получения рандомгного числа в заданном интервале
 var getRandomNumber = function (from, to) {
+=======
+  return arr[Math.floor(Math.random() * arr.length)];
+};
+// функция получения рандомгного числа в заданном интервале
+var generatedRandomNumber = function (from, to) {
+>>>>>>> 2052b792671f2f6c04acaded8b051012f411fd3b
   return Math.floor(Math.random() * (to - from + 1) + from);
 };
-// функция генерации рандомного массива из заданного массива
-var getRandomArray = function (arr) {
+// функция генерации массива случайной длинны из заданного массива
+var generatedRandomArray = function (arr) {
   var randomArr = [];
-  for (var i = 0; i < getRandomNumber(1, arr.length); i++) {
-    randomArr.push(arr[i]);
+  var count = generatedRandomNumber(1, arr.length);
+  var copyArr = arr.slice();
+  for (var i = 0; i < count; i++) {
+    var randomElement = getRandomElement(copyArr);
+    copyArr = copyArr.filter(function (item) {
+      return randomElement !== item;
+    });
+    randomArr.push(randomElement);
   }
   return randomArr;
 };
 // генерация шаблонного объекта с данными
 var makeSimilarAd = function () {
+  var positionX = generatedRandomNumber(25, map.clientWidth - 25);
+  var positionY = generatedRandomNumber(130, 630);
   var ad = {
     'author': {
       'avatar': 'img/avatars/user' + getRandomElement(AVATAR_PHOTOS) + '.png'
     },
     'offer': {
       'title': getRandomElement(OFFER_TITLES),
-      'address': getRandomNumber(100, 1000) + ', ' + getRandomNumber(100, 1000),
-      'price': getRandomNumber(1000, 10000),
+      'address': positionX + ', ' + positionY,
+      'price': generatedRandomNumber(1000, 10000),
       'type': getRandomElement(TYPES),
-      'rooms': getRandomNumber(1, 6),
-      'guests': getRandomNumber(1, 5),
+      'rooms': generatedRandomNumber(1, 6),
+      'guests': generatedRandomNumber(1, 5),
       'checkin': getRandomElement(CHECKIN),
       'checkout': getRandomElement(CHECKOUT),
-      'features': getRandomArray(FEATURES),
+      'features': generatedRandomArray(FEATURES),
       'description': getRandomElement(DESCRIIPTIONS),
-      'photos': getRandomElement(PHOTOS),
+      'photos': generatedRandomArray(PHOTOS),
     },
     'location': {
-      'x': getRandomNumber(0, map.clientWidth),
-      'y': getRandomNumber(130, 630)
+      'x': positionX,
+      'y': positionY
     }
   };
   return ad;
 };
 // генерация массива с объктами данных
-var generateAds = function (count) {
+var generatedAds = function (count) {
   var arr = [];
   for (var i = 0; i < count; i++) {
     arr.push(makeSimilarAd());
@@ -67,12 +82,12 @@ var generateAds = function (count) {
   return arr;
 
 };
-var ads = generateAds(8);
+var ads = generatedAds(8);
 // открываем карту...
 map.classList.remove('map--faded');
 
 // функция-шаблон для создания метки
-var getDrawPin = function (element) {
+var generatedPin = function (element) {
   var clonePin = pin.cloneNode(true);
   var img = clonePin.querySelector('img');
   clonePin.style.left = element.location.x + 25 + 'px';
@@ -85,15 +100,13 @@ var getDrawPin = function (element) {
 var getSimilarAds = function (dataArray) {
   var fragment = new DocumentFragment();
   for (var i = 0; i < dataArray.length; i++) {
-    fragment.prepend(getDrawPin(dataArray[i]));
+    fragment.prepend(generatedPin(dataArray[i]));
   }
   return fragment;
 };
+var similarAds = getSimilarAds(ads);
 // отрисовка меток на карте
-var render = function (element, pasteElements) {
-  element.prepend(pasteElements);
-};
-render(mapPins, getSimilarAds(ads));
+mapPins.prepend(similarAds);
 
 var getDrawAd = function (element) {
   var cloneCard = cardAd.cloneNode(true);
