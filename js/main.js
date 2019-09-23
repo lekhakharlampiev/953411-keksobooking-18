@@ -15,7 +15,7 @@ var templatePpin = document.querySelector('#pin').content;
 var pin = templatePpin.querySelector('.map__pin');
 
 // функция получения рандомного элемента из массива
-var generatedRandomElement = function (arr) {
+var getRandomElement = function (arr) {
   return arr[Math.floor(Math.random() * arr.length)];
 };
 // функция получения рандомгного числа в заданном интервале
@@ -26,12 +26,13 @@ var generatedRandomNumber = function (from, to) {
 var generatedRandomArray = function (arr) {
   var randomArr = [];
   var count = generatedRandomNumber(1, arr.length);
-  var newArr = arr.slice();
-  newArr.sort(function () {
-    return Math.random() - 0.5;
-  });
+  var copyArr = arr.slice();
   for (var i = 0; i < count; i++) {
-    randomArr.push(newArr[i]);
+    var randomElement = getRandomElement(copyArr);
+    copyArr = copyArr.filter(function (item) {
+      return randomElement !== item;
+    });
+    randomArr.push(randomElement);
   }
   return randomArr;
 };
@@ -41,19 +42,19 @@ var makeSimilarAd = function () {
   var positionY = generatedRandomNumber(130, 630);
   var ad = {
     'author': {
-      'avatar': 'img/avatars/user' + generatedRandomElement(AVATAR_PHOTOS) + '.png'
+      'avatar': 'img/avatars/user' + getRandomElement(AVATAR_PHOTOS) + '.png'
     },
     'offer': {
-      'title': generatedRandomElement(OFFER_TITLES),
+      'title': getRandomElement(OFFER_TITLES),
       'address': positionX + ', ' + positionY,
       'price': generatedRandomNumber(1000, 10000),
-      'type': generatedRandomElement(TYPES),
+      'type': getRandomElement(TYPES),
       'rooms': generatedRandomNumber(1, 6),
       'guests': generatedRandomNumber(1, 5),
-      'checkin': generatedRandomElement(CHECKIN),
-      'checkout': generatedRandomElement(CHECKOUT),
+      'checkin': getRandomElement(CHECKIN),
+      'checkout': getRandomElement(CHECKOUT),
       'features': generatedRandomArray(FEATURES),
-      'description': generatedRandomElement(DESCRIIPTIONS),
+      'description': getRandomElement(DESCRIIPTIONS),
       'photos': generatedRandomArray(PHOTOS),
     },
     'location': {
@@ -73,7 +74,6 @@ var generatedAds = function (count) {
 
 };
 var ads = generatedAds(8);
-console.log(ads);
 // открываем карту...
 map.classList.remove('map--faded');
 
