@@ -112,9 +112,10 @@ var getDrawAd = function (element) {
   var popupFeatures = cloneCard.querySelector('.popup__features');
   var popupDescription = cloneCard.querySelector('.popup__description');
   var popupPhotos = cloneCard.querySelector('.popup__photos');
+  var popupPhoto = popupPhotos.querySelector('.popup__photo');
 
   var typeOfHouse = '';
-  switch(element.offer.type) {
+  switch (element.offer.type) {
     case 'bungalo':
       typeOfHouse = 'Бунгало';
       break;
@@ -152,6 +153,16 @@ var getDrawAd = function (element) {
   popupType.textContent = typeOfHouse;
   popupCapacity.textContent = element.offer.rooms + ' комнат(а)ы для ' + element.offer.guests + ' гост(я)ей';
   popupCheckTime.textContent = 'Заезд после ' + element.offer.checkin + ', выезд до ' + element.offer.checkout;
+  popupDescription.textContent = element.offer.description;
+
+  var photosSrc = element.offer.photos;
+  var photo = popupPhoto.cloneNode();
+  popupPhoto.remove();
+  for (var a = 0; a < photosSrc.length; a++) {
+    var copy = photo.cloneNode();
+    copy.src = photosSrc[a];
+    popupPhotos.prepend(copy);
+  }
 
   return cloneCard;
 };
