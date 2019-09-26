@@ -8,11 +8,29 @@ var CHECKOUT = ['12:00', '13:00', '14:00'];
 var FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
 var DESCRIIPTIONS = ['есть парковка рядом с домом', 'можно с животными но без детей', 'можно с детьми но без животных', 'можно только одним животным или только одним детям', 'воды нет но рядом есть магазин'];
 var PHOTOS = ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg'];
+
 // получение DOM элементов
 var map = document.querySelector('.map');
 var mapPins = document.querySelector('.map__pins');
 var templatePpin = document.querySelector('#pin').content;
 var pin = templatePpin.querySelector('.map__pin');
+var adForm = document.querySelector('.ad-form');
+var fieldset = adForm.querySelectorAll('fieldset');
+
+// установка всем полям disabled
+var makeIsDisabled = function (collection) {
+  for (var i = 0; i < collection.length; i++) {
+    collection[i].setAttribute('disabled', 'disabled');
+  }
+};
+
+makeIsDisabled(fieldset);
+
+var makeIsActivate = function (collection) {
+  for (var i = 0; i < collection.length; i++) {
+    collection[i].removeAttribute('disabled');
+  }
+};
 
 // функция получения рандомного элемента из массива
 var getRandomElement = function (arr) {
@@ -74,9 +92,6 @@ var generatedAds = function (count) {
 
 };
 var ads = generatedAds(8);
-// открываем карту...
-map.classList.remove('map--faded');
-
 // функция-шаблон для создания метки
 var generatedPin = function (element) {
   var clonePin = pin.cloneNode(true);
@@ -98,4 +113,21 @@ var getSimilarAds = function (dataArray) {
 var similarAds = getSimilarAds(ads);
 // отрисовка меток на карте
 mapPins.prepend(similarAds);
+
+var mainPin = map.querySelector('.map__pin--main');
+var inputAddress = adForm.querySelector('input[name="address"]');
+var mainPinMousedownHandler = function () {
+  var coordinateX = mainPin.style.left + ' расстояние до острого конца по горизонтали';
+  var coordinateY = mainPin.style.top + ' расстояние до острого конца по вертикали';
+  map.classList.remove('map--faded');
+  adForm.classList.remove('ad-form--disabled');
+  inputAddress.value = coordinateX + ', ' + coordinateY;
+  makeIsActivate(fieldset);
+};
+mainPin.addEventListener('mousedown', mainPinMousedownHandler);
+mainPin.addEventListener('keydown', function (evt) {
+  if (evt.keyCode === 13) {
+    mainPinMousedownHandler();
+  }
+});
 
