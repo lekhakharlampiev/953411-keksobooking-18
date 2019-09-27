@@ -116,6 +116,7 @@ mapPins.prepend(similarAds);
 
 var mainPin = map.querySelector('.map__pin--main');
 var inputAddress = adForm.querySelector('input[name="address"]');
+
 var mainPinMousedownHandler = function () {
   var coordinateX = mainPin.style.left + ' расстояние до острого конца по горизонтали';
   var coordinateY = mainPin.style.top + ' расстояние до острого конца по вертикали';
@@ -130,4 +131,39 @@ mainPin.addEventListener('keydown', function (evt) {
     mainPinMousedownHandler();
   }
 });
+// зависимость поля " Цена за ночь" от "Тип жилья"
+var inputTypeOfHouse = adForm.querySelector('#type');
+var inputPrisePerNight = adForm.querySelector('#price');
 
+var inputTypeChangeHandler = function (evt) {
+  var minPrice = 0;
+  if (evt.target.value === 'house') {
+    minPrice = 5000;
+  }
+  if (evt.target.value === 'flat') {
+    minPrice = 1000;
+  }
+  if (evt.target.value === 'palace') {
+    minPrice = 10000;
+  }
+  inputPrisePerNight.setAttribute('placeholder', minPrice);
+  inputPrisePerNight.setAttribute('min', minPrice);
+};
+inputTypeOfHouse.addEventListener('input', inputTypeChangeHandler);
+
+// синхронизация полей Время заезда/выезда
+var inputTimeFieldset = adForm.querySelector('.ad-form__element--time');
+var inputTimeIn = adForm.querySelector('#timein');
+var inputTimeOut = adForm.querySelector('#timeout');
+var inputTimeIChangeHandler = function (evt) {
+  var time;
+  if (evt.target === inputTimeIn) {
+    time = inputTimeIn.value;
+    inputTimeOut.value = time;
+  }
+  if (evt.target === inputTimeOut) {
+    time = inputTimeOut.value;
+    inputTimeIn.value = time;
+  }
+};
+inputTimeFieldset.addEventListener('input', inputTimeIChangeHandler);
