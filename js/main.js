@@ -131,11 +131,21 @@ mainPin.addEventListener('keydown', function (evt) {
     mainPinMousedownHandler();
   }
 });
+var form = {
+  input: {
+    type: adForm.querySelector('#type'),
+    price: adForm.querySelector('#price'),
+    timeFildset: adForm.querySelector('.ad-form__element--time'),
+    timeIn: adForm.querySelector('#timein'),
+    timeOut: adForm.querySelector('#timeout'),
+    rooms: adForm.querySelector('#room_number'),
+    guests: adForm.querySelector('#capacity'),
+  }
+}
 // зависимость поля " Цена за ночь" от "Тип жилья"
-var inputTypeOfHouse = adForm.querySelector('#type');
-var inputPrisePerNight = adForm.querySelector('#price');
 
 var inputTypeChangeHandler = function (evt) {
+  var price = form.input.price;
   var minPrice = 0;
   if (evt.target.value === 'house') {
     minPrice = 5000;
@@ -146,24 +156,65 @@ var inputTypeChangeHandler = function (evt) {
   if (evt.target.value === 'palace') {
     minPrice = 10000;
   }
-  inputPrisePerNight.setAttribute('placeholder', minPrice);
-  inputPrisePerNight.setAttribute('min', minPrice);
+  price.setAttribute('placeholder', minPrice);
+  price.setAttribute('min', minPrice);
 };
-inputTypeOfHouse.addEventListener('input', inputTypeChangeHandler);
+form.input.type.addEventListener('input', inputTypeChangeHandler);
 
 // синхронизация полей Время заезда/выезда
-var inputTimeFieldset = adForm.querySelector('.ad-form__element--time');
-var inputTimeIn = adForm.querySelector('#timein');
-var inputTimeOut = adForm.querySelector('#timeout');
 var inputTimeIChangeHandler = function (evt) {
   var time;
-  if (evt.target === inputTimeIn) {
-    time = inputTimeIn.value;
-    inputTimeOut.value = time;
+  var timein = form.input.timeIn;
+  var timeout = form.input.timeOut;
+  if (evt.target === timein) {
+    time = timein.value;
+    timeout.value = time;
   }
-  if (evt.target === inputTimeOut) {
-    time = inputTimeOut.value;
-    inputTimeIn.value = time;
+  if (evt.target === timeout) {
+    time = timeout.value;
+    timein.value = time;
   }
 };
-inputTimeFieldset.addEventListener('input', inputTimeIChangeHandler);
+form.input.timeFildset.addEventListener('input', inputTimeIChangeHandler);
+// синхронизация значений полей Количество комнат/Количество мест
+var guestOptions = form.input.guests.querySelectorAll('option');
+makeIsDisabled(guestOptions);
+var inputRoomsChangeHandler = function (evt) {
+  var toClean = function () {
+    form.input.guests.value = '';
+  };
+  var guests = form.input.guests;
+  var rooms = evt.target.value;
+  var guest1 = guests.querySelector('option[value="1"]');
+  var guest2 = guests.querySelector('option[value="2"]');
+  var guest3 = guests.querySelector('option[value="3"]');
+  var guest0 = guests.querySelector('option[value="0"]');
+  if (rooms === '1') {
+    toClean();
+    guest1.removeAttribute('disabled');
+    guest2.setAttribute('disabled', 'disabled');
+    guest3.setAttribute('disabled', 'disabled');
+    guest0.setAttribute('disabled', 'disabled');
+  }
+  else if (rooms === '2') {
+    toClean();
+    guest1.removeAttribute('disabled');
+    guest2.removeAttribute('disabled');
+    guest3.setAttribute('disabled', 'disabled');
+    guest0.setAttribute('disabled', 'disabled');
+  }
+  else if (rooms === '3') {
+    toClean();
+    guest1.removeAttribute('disabled');
+    guest2.removeAttribute('disabled');
+    guest3.removeAttribute('disabled');
+    guest0.setAttribute('disabled', 'disabled');
+  } else {
+    toClean();
+    guest0.removeAttribute('disabled');
+    guest1.setAttribute('disabled', 'disabled');
+    guest2.setAttribute('disabled', 'disabled');
+    guest3.setAttribute('disabled', 'disabled');
+  }
+};
+form.input.rooms.addEventListener('input', inputRoomsChangeHandler);
