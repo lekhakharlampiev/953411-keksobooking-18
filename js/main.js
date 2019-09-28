@@ -141,7 +141,7 @@ var form = {
     rooms: adForm.querySelector('#room_number'),
     guests: adForm.querySelector('#capacity'),
   }
-}
+};
 // зависимость поля " Цена за ночь" от "Тип жилья"
 
 var inputTypeChangeHandler = function (evt) {
@@ -195,15 +195,13 @@ var inputRoomsChangeHandler = function (evt) {
     guest2.setAttribute('disabled', 'disabled');
     guest3.setAttribute('disabled', 'disabled');
     guest0.setAttribute('disabled', 'disabled');
-  }
-  else if (rooms === '2') {
+  } else if (rooms === '2') {
     toClean();
     guest1.removeAttribute('disabled');
     guest2.removeAttribute('disabled');
     guest3.setAttribute('disabled', 'disabled');
     guest0.setAttribute('disabled', 'disabled');
-  }
-  else if (rooms === '3') {
+  } else if (rooms === '3') {
     toClean();
     guest1.removeAttribute('disabled');
     guest2.removeAttribute('disabled');
