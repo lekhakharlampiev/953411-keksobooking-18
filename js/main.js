@@ -210,33 +210,22 @@ form.input.timeFildset.addEventListener('input', inputTimeIChangeHandler);
 // синхронизация значений полей Количество комнат/Количество мест
 makeIsDisabled(form.input.guests);
 var inputRoomsChangeHandler = function (evt) {
+  makeIsDisabled(form.input.guests);
   form.input.capacity.value = '';
   var guests = form.input.capacity;
+  var options = form.input.guests;
   var rooms = evt.target.value;
-  var guest1 = guests.querySelector('option[value="1"]');
-  var guest2 = guests.querySelector('option[value="2"]');
-  var guest3 = guests.querySelector('option[value="3"]');
-  var guest0 = guests.querySelector('option[value="0"]');
-  if (rooms === '1') {
-    guest1.removeAttribute('disabled');
-    guest2.setAttribute('disabled', 'disabled');
-    guest3.setAttribute('disabled', 'disabled');
-    guest0.setAttribute('disabled', 'disabled');
-  } else if (rooms === '2') {
-    guest1.removeAttribute('disabled');
-    guest2.removeAttribute('disabled');
-    guest3.setAttribute('disabled', 'disabled');
-    guest0.setAttribute('disabled', 'disabled');
-  } else if (rooms === '3') {
-    guest1.removeAttribute('disabled');
-    guest2.removeAttribute('disabled');
-    guest3.removeAttribute('disabled');
-    guest0.setAttribute('disabled', 'disabled');
-  } else {
-    guest0.removeAttribute('disabled');
-    guest1.setAttribute('disabled', 'disabled');
-    guest2.setAttribute('disabled', 'disabled');
-    guest3.setAttribute('disabled', 'disabled');
+  var isDiabled = function (number) {
+    var arr = Array.from(options).slice(0, number);
+    console.log(arr);
+    for (var i = 0; i < arr.length; i++) {
+      options[i].removeAttribute('disabled');
+    }
+  };
+  for (var i = 0; i < options.length; i++) {
+    if (rooms === options[i].value) {
+      isDiabled(i);
+    }
   }
 };
 form.input.rooms.addEventListener('input', inputRoomsChangeHandler);
