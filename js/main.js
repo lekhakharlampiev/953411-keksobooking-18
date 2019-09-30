@@ -212,13 +212,14 @@ makeIsDisabled(form.input.guests);
 var inputRoomsChangeHandler = function (evt) {
   makeIsDisabled(form.input.guests);
   form.input.capacity.value = '';
-  var guests = form.input.capacity;
   var options = form.input.guests;
   var rooms = evt.target.value;
+  var lastElement = options.length - 1;
+  if (rooms === '100') {
+    options[lastElement].removeAttribute('disabled');
+  }
   var isDiabled = function (number) {
-    var arr = Array.from(options).slice(0, number);
-    console.log(arr);
-    for (var i = 0; i < arr.length; i++) {
+    for (var i = number; i < lastElement; i++) {
       options[i].removeAttribute('disabled');
     }
   };
