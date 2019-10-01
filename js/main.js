@@ -146,20 +146,19 @@ var getPinCenterCoordinate = function (element, width) {
 
 var installPinAddress = function () {
   var coordinate = getPinCenterCoordinate(mainPin, 65);
-  var top = coordinate.top + ' расстояние до острого конца по вертикали';
-  var left = coordinate.left + ' расстояние до острого конца по горизонтали';
+  var y = coordinate.top;
+  var x = coordinate.left;
+  var top = y + ' расстояние до острого конца по вертикали';
+  var left = x + ' расстояние до острого конца по горизонтали';
   var value = left + ', ' + top;
   form.input.address.value = value;
 };
 installPinAddress();
 
 var mainPinMousedownHandler = function () {
-  var coordinate = getPinCenterCoordinate(mainPin, 65);
-  var coordinateX = coordinate.left + ' расстояние до острого конца по горизонтали';
-  var coordinateY = coordinate.top + ' расстояние до острого конца по вертикали';
   map.classList.remove('map--faded');
   adForm.classList.remove('ad-form--disabled');
-  form.input.address.value = coordinateX + ', ' + coordinateY;
+  installPinAddress();
   makeIsActivate(fieldset);
 };
 
