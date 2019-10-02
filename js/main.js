@@ -16,7 +16,6 @@ var templatePpin = document.querySelector('#pin').content;
 var pin = templatePpin.querySelector('.map__pin');
 var adForm = document.querySelector('.ad-form');
 var fieldset = adForm.querySelectorAll('fieldset');
-
 // установка всем полям disabled
 var makeIsDisabled = function (collection) {
   for (var i = 0; i < collection.length; i++) {
@@ -25,13 +24,6 @@ var makeIsDisabled = function (collection) {
 };
 
 makeIsDisabled(fieldset);
-
-var makeIsActivate = function (collection) {
-  for (var i = 0; i < collection.length; i++) {
-    collection[i].removeAttribute('disabled');
-  }
-};
-
 // функция получения рандомного элемента из массива
 var getRandomElement = function (arr) {
   return arr[Math.floor(Math.random() * arr.length)];
@@ -92,6 +84,7 @@ var generatedAds = function (count) {
 
 };
 var ads = generatedAds(8);
+window.ads = ads;
 // функция-шаблон для создания метки
 var generatedPin = function (element) {
   var clonePin = pin.cloneNode(true);
@@ -113,127 +106,3 @@ var getSimilarAds = function (dataArray) {
 var similarAds = getSimilarAds(ads);
 // отрисовка меток на карте
 mapPins.prepend(similarAds);
-
-var mainPin = map.querySelector('.map__pin--main');
-// var inputAddress = adForm.querySelector('input[name="address"]');
-var form = {};
-form.input = {};
-form.input.address = adForm.querySelector('input[name="address"]');
-form.input.type = adForm.querySelector('#type');
-form.input.price = adForm.querySelector('#price');
-form.input.timeFildset = adForm.querySelector('.ad-form__element--time');
-form.input.timeIn = adForm.querySelector('#timein');
-form.input.timeOut = adForm.querySelector('#timeout');
-form.input.rooms = adForm.querySelector('#room_number');
-form.input.capacity = adForm.querySelector('#capacity');
-form.input.guests = form.input.capacity.querySelectorAll('option');
-
-var getLocation = function (elem) {
-  var element = elem.getBoundingClientRect();
-  var coord = {};
-  coord.top = element.y;
-  coord.left = element.x;
-  return coord;
-
-};
-var getPinLocation = function (pinMap, active) {
-  var coordinate = pinMap.getBoundingClientRect();
-  var position = getLocation(pinMap);
-  var width = coordinate.width;
-  var height = coordinate.height;
-  if (!active) {
-    return {
-      top: height / 2 + position.top,
-      left: width / 2 + position.left,
-    };
-  }
-  return {
-    top: height + position.top + 16, // 16 - расстояние от края элемента главной метки
-    left: width / 2 + position.left // до острого кончика псевдоэлемента
-  };
-};
-var installPinAddress = function (pinMap, active) {
-  var coordinate = getPinLocation(pinMap, active);
-  var y = Math.floor(coordinate.top);
-  var x = Math.floor(coordinate.left);
-  var top = y + ' расстояние до острого конца по вертикали';
-  var left = x + ' расстояние до острого конца по горизонтали';
-  var value = left + ', ' + top;
-  form.input.address.value = value;
-};
-installPinAddress(mainPin, false);
-
-var mainPinMousedownHandler = function () {
-  map.classList.remove('map--faded');
-  adForm.classList.remove('ad-form--disabled');
-  installPinAddress(mainPin, true);
-  makeIsActivate(fieldset);
-};
-
-mainPin.addEventListener('mousedown', mainPinMousedownHandler);
-mainPin.addEventListener('keydown', function (evt) {
-  if (evt.keyCode === 13) {
-    mainPinMousedownHandler();
-  }
-});
-// зависимость поля " Цена за ночь" от "Тип жилья"
-var settingMinPrice = function (elem) {
-  var price = form.input.price;
-  var minPrice = 0;
-  if (elem.value === 'house') {
-    minPrice = 5000;
-  }
-  if (elem.value === 'flat') {
-    minPrice = 1000;
-  }
-  if (elem.value === 'palace') {
-    minPrice = 10000;
-  }
-  price.setAttribute('placeholder', minPrice);
-  price.setAttribute('min', minPrice);
-};
-settingMinPrice(form.input.type);
-var inputTypeChangeHandler = function (evt) {
-  var changeElem = evt.target;
-  settingMinPrice(changeElem);
-};
-form.input.type.addEventListener('input', inputTypeChangeHandler);
-
-// синхронизация полей Время заезда/выезда
-var inputTimeIChangeHandler = function (evt) {
-  var time;
-  var timein = form.input.timeIn;
-  var timeout = form.input.timeOut;
-  if (evt.target === timein) {
-    time = timein.value;
-    timeout.value = time;
-  }
-  if (evt.target === timeout) {
-    time = timeout.value;
-    timein.value = time;
-  }
-};
-form.input.timeFildset.addEventListener('input', inputTimeIChangeHandler);
-// синхронизация значений полей Количество комнат/Количество мест
-makeIsDisabled(form.input.guests);
-var inputRoomsChangeHandler = function (evt) {
-  makeIsDisabled(form.input.guests);
-  form.input.capacity.value = '';
-  var options = form.input.guests;
-  var rooms = evt.target.value;
-  var lastElement = options.length - 1;
-  if (rooms === '100') {
-    options[lastElement].removeAttribute('disabled');
-  }
-  var isDiabled = function (number) {
-    for (var i = number; i < lastElement; i++) {
-      options[i].removeAttribute('disabled');
-    }
-  };
-  for (var i = 0; i < options.length; i++) {
-    if (rooms === options[i].value) {
-      isDiabled(i);
-    }
-  }
-};
-form.input.rooms.addEventListener('input', inputRoomsChangeHandler);
