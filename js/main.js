@@ -128,37 +128,45 @@ form.input.rooms = adForm.querySelector('#room_number');
 form.input.capacity = adForm.querySelector('#capacity');
 form.input.guests = form.input.capacity.querySelectorAll('option');
 
-var getElementLocation = function (element) {
-  var elem = element.getBoundingClientRect();
+var getLocation = function (elem) {
+  var element = elem.getBoundingClientRect();
+  var coord = {};
+  coord.top = element.y;
+  coord.left = element.x;
+  return coord;
+
+};
+var getPinLocation = function (pinMap, active) {
+  var coordinate = pinMap.getBoundingClientRect();
+  var position = getLocation(pinMap);
+  var width = coordinate.width;
+  var height = coordinate.height;
+  if (!active) {
+    return {
+      top: height / 2 + position.top,
+      left: width / 2 + position.left,
+    };
+  }
   return {
-    top: elem.y,
-    left: elem.x
+    top: height + position.top + 16, // 16 - расстояние от края элемента главной метки
+    left: width / 2 + position.left // до острого кончика псевдоэлемента
   };
 };
-
-var getPinCenterCoordinate = function (element, width) {
-  var coordinate = getElementLocation(element);
-  return {
-    top: Math.floor(coordinate.top),
-    left: Math.floor(coordinate.left + width / 2)
-  };
-};
-
-var installPinAddress = function () {
-  var coordinate = getPinCenterCoordinate(mainPin, 65);
-  var y = coordinate.top;
-  var x = coordinate.left;
+var installPinAddress = function (pinMap, active) {
+  var coordinate = getPinLocation(pinMap, active);
+  var y = Math.floor(coordinate.top);
+  var x = Math.floor(coordinate.left);
   var top = y + ' расстояние до острого конца по вертикали';
   var left = x + ' расстояние до острого конца по горизонтали';
   var value = left + ', ' + top;
   form.input.address.value = value;
 };
-installPinAddress();
+installPinAddress(mainPin, false);
 
 var mainPinMousedownHandler = function () {
   map.classList.remove('map--faded');
   adForm.classList.remove('ad-form--disabled');
-  installPinAddress();
+  installPinAddress(mainPin, true);
   makeIsActivate(fieldset);
 };
 
