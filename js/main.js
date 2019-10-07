@@ -136,9 +136,22 @@ var getLocation = function (elem) {
   return coord;
 
 };
+var getPinTipHeight = function () {
+  var pinAfter = getComputedStyle(mainPin, '::after');
+  var afterHeight = parseInt(pinAfter.borderTopWidth, 10);
+  return afterHeight;
+};
+var getMainPinHeight = function () {
+  var pinAfterHeaight = getPinTipHeight();
+  var img = mainPin.querySelector('img');
+  var imgHeight = img.clientHeight;
+  var pinHeight = pinAfterHeaight + imgHeight;
+  return pinHeight;
+};
 var getPinLocation = function (pinMap, active) {
   var coordinate = pinMap.getBoundingClientRect();
   var position = getLocation(pinMap);
+  var activePinHeight = getMainPinHeight();
   var width = coordinate.width;
   var height = coordinate.height;
   if (!active) {
@@ -148,7 +161,7 @@ var getPinLocation = function (pinMap, active) {
     };
   }
   return {
-    top: height + position.top + 16, // 16 - расстояние от края элемента главной метки
+    top: activePinHeight + position.top, // 16 - расстояние от края элемента главной метки
     left: width / 2 + position.left // до острого кончика псевдоэлемента
   };
 };
@@ -156,8 +169,12 @@ var installPinAddress = function (pinMap, active) {
   var coordinate = getPinLocation(pinMap, active);
   var y = Math.floor(coordinate.top);
   var x = Math.floor(coordinate.left);
-  var top = y + ' расстояние до острого конца по вертикали';
-  var left = x + ' расстояние до острого конца по горизонтали';
+  var top = y;
+  var left = x;
+  if (active) {
+    top = y + ' расстояние до острого конца по вертикали';
+    left = x + ' расстояние до острого конца по горизонтали';
+  }
   var value = left + ', ' + top;
   form.input.address.value = value;
 };
