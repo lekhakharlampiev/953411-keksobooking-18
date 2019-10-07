@@ -1,8 +1,12 @@
 'use strict';
 (function () {
+  var dom = {};
+  dom.pinsMap = document.querySelector('.map__pins');
+  dom.template = document.querySelector('#pin').content;
+  dom.pin = dom.template.querySelector('.map__pin');
   // функция-шаблон для создания метки
   var generatedPin = function (element) {
-    var clonePin = pin.cloneNode(true);
+    var clonePin = dom.pin.cloneNode(true);
     var img = clonePin.querySelector('img');
     clonePin.style.left = element.location.x + 25 + 'px';
     clonePin.style.top = element.location.y + 70 + 'px';
@@ -18,7 +22,7 @@
     }
     return fragment;
   };
-  var similarAds = getSimilarAds(ads);
+  var similarAds = getSimilarAds(window.ads);
   // отрисовка меток на карте
-  mapPins.prepend(similarAds);
+  dom.pinsMap.prepend(similarAds);
 })();
