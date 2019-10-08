@@ -1,5 +1,6 @@
 'use strict';
 (function () {
+  var URL = 'https://js.dump.academy/keksobooking/data';
   var dom = {};
   dom.pinsMap = document.querySelector('.map__pins');
   dom.template = document.querySelector('#pin').content;
@@ -22,7 +23,9 @@
     }
     return fragment;
   };
-  var similarAds = getSimilarAds(window.ads);
-  // отрисовка меток на карте
-  dom.pinsMap.prepend(similarAds);
+  window.unLoad(URL, function (data) {
+    var similarAds = getSimilarAds(data);
+    // отрисовка меток на карте
+    dom.pinsMap.prepend(similarAds);
+  });
 })();
