@@ -1,13 +1,16 @@
 'use strict';
 (function () {
   var URL = 'https://js.dump.academy/keksobooking/data';
-  var dom = {};
-  dom.pinsMap = document.querySelector('.map__pins');
-  dom.template = document.querySelector('#pin').content;
-  dom.pin = dom.template.querySelector('.map__pin');
+  var Dom = {};
+  Dom.main = document.querySelector('main');
+  Dom.pinsMap = document.querySelector('.map__pins');
+  Dom.templatePin = document.querySelector('#pin').content;
+  Dom.pin = Dom.templatePin.querySelector('.map__pin');
+  Dom.tamplateError = document.querySelector('#error').content;
+  Dom.error = Dom.tamplateError.querySelector('.error');
   // функция-шаблон для создания метки
   var generatedPin = function (element) {
-    var clonePin = dom.pin.cloneNode(true);
+    var clonePin = Dom.pin.cloneNode(true);
     var img = clonePin.querySelector('img');
     clonePin.style.left = element.location.x + 25 + 'px';
     clonePin.style.top = element.location.y + 70 + 'px';
@@ -23,9 +26,20 @@
     }
     return fragment;
   };
-  window.unLoad(URL, function (data) {
+  // сообщение об ошибке загрузки данных
+  var showErrorMassege = function () {
+    var fragment = new DocumentFragment();
+    var clone = Dom.error.cloneNode(true);
+    fragment.prepend(clone);
+    return fragment;
+  };
+  var onSuccess = function (data) {
     var similarAds = getSimilarAds(data);
-    // отрисовка меток на карте
-    dom.pinsMap.prepend(similarAds);
-  });
+    Dom.pinsMap.prepend(similarAds);
+  };
+  var onError = function () {
+    Dom.main.prepend(errorMassege);
+  };
+  var errorMassege = showErrorMassege();
+  window.unLoad(URL, onSuccess, onError);
 })();
