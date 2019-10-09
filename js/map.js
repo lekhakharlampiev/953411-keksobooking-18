@@ -12,48 +12,33 @@
       collection[i].removeAttribute('disabled');
     }
   };
-
-  var getLocation = function (elem) {
-    var element = elem.getBoundingClientRect();
-    var coord = {};
-    coord.top = element.y;
-    coord.left = element.x;
-    return coord;
-
+  var markLocation = {};
+  markLocation.getMarkCoord = function (mark, active) {
+    var markRect = mark.getBoundingClientRect();
+    var parameters = {
+      markX: markRect.x,
+      markY: markRect.y,
+      halfHeight: markRect.height / 2,
+      halfWidth: markRect.width / 2,
+      pinHeight: markLocation.getPinHeight(mark),
+    };
+    var markCoordinate = {};
+    markCoordinate.x = parameters.markX + parameters.halfWidth;
+    markCoordinate.y = active ? parameters.markY + parameters.pinHeight : parameters.markY + parameters.halfHeight;
+    return markCoordinate;
   };
-  var getPinTipHeight = function () {
-    var pinAfter = getComputedStyle(dom.mainPin, '::after');
-    var afterHeight = parseInt(pinAfter.borderTopWidth, 10);
-    return afterHeight;
-  };
-  var getMainPinHeight = function () {
-    var pinAfterHeaight = getPinTipHeight();
-    var img = dom.mainPin.querySelector('img');
+  markLocation.getPinHeight = function (mark) { // высота главной метки состоит
+    var img = dom.mainPin.querySelector('img'); // из высоты картинки внутри  метки без отступов +
+    var pinAfterStyle = getComputedStyle(mark, '::after'); // высота псевдоэлемента
     var imgHeight = img.clientHeight;
-    var pinHeight = pinAfterHeaight + imgHeight;
+    var afterHeight = parseInt(pinAfterStyle.height, 10);
+    var pinHeight = afterHeight + imgHeight;
     return pinHeight;
   };
-  var getPinLocation = function (pinMap, active) {
-    var coordinate = pinMap.getBoundingClientRect();
-    var position = getLocation(pinMap);
-    var activePinHeight = getMainPinHeight();
-    var width = coordinate.width;
-    var height = coordinate.height;
-    if (!active) {
-      return {
-        top: height / 2 + position.top,
-        left: width / 2 + position.left,
-      };
-    }
-    return {
-      top: activePinHeight + position.top, // 16 - расстояние от края элемента главной метки
-      left: width / 2 + position.left // до острого кончика псевдоэлемента
-    };
-  };
   var installPinAddress = function (pinMap, active) {
-    var coordinate = getPinLocation(pinMap, active);
-    var y = Math.floor(coordinate.top);
-    var x = Math.floor(coordinate.left);
+    var coordinate = markLocation.getMarkCoord(pinMap, active);
+    var y = Math.floor(coordinate.y);
+    var x = Math.floor(coordinate.x);
     var top = y;
     var left = x;
     if (active) {
@@ -63,15 +48,13 @@
     var value = left + ', ' + top;
     dom.formAddress.value = value;
   };
-  installPinAddress(dom.mainPin, false);
-
   var mainPinMousedownHandler = function () {
     dom.map.classList.remove('map--faded');
     dom.form.classList.remove('ad-form--disabled');
     installPinAddress(dom.mainPin, true);
     makeIsActivate(dom.fieldset);
   };
-
+  installPinAddress(dom.mainPin, false);
   dom.mainPin.addEventListener('mousedown', mainPinMousedownHandler);
   dom.mainPin.addEventListener('keydown', function (evt) {
     if (evt.keyCode === 13) {
