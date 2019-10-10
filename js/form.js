@@ -2,6 +2,7 @@
 (function () {
   var form = {};
   form.adForm = document.querySelector('.ad-form');
+  form.fildsets = form.adForm.querySelectorAll('fieldset');
   form.input = {};
   form.input.address = form.adForm.querySelector('input[name="address"]');
   form.input.type = form.adForm.querySelector('#type');
@@ -18,6 +19,7 @@
       collection[i].setAttribute('disabled', 'disabled');
     }
   };
+  makeIsDisabled(form.fildsets);
 
   // зависимость поля " Цена за ночь" от "Тип жилья"
   var settingMinPrice = function (elem) {
