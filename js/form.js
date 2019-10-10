@@ -20,9 +20,10 @@
     }
   };
   makeIsDisabled(form.fildsets);
+  makeIsDisabled(form.input.guests);
 
-  // зависимость поля " Цена за ночь" от "Тип жилья"
-  var settingMinPrice = function (elem) {
+  var validation = {};
+  validation.settingMinPrice = function (elem) {
     var price = form.input.price;
     var minPrice = 0;
     if (elem.value === 'house') {
@@ -37,15 +38,11 @@
     price.setAttribute('placeholder', minPrice);
     price.setAttribute('min', minPrice);
   };
-  settingMinPrice(form.input.type);
-  var inputTypeChangeHandler = function (evt) {
+  validation.inputTypeChangeHandler = function (evt) {
     var changeElem = evt.target;
-    settingMinPrice(changeElem);
+    validation.settingMinPrice(changeElem);
   };
-  form.input.type.addEventListener('input', inputTypeChangeHandler);
-
-  // синхронизация полей Время заезда/выезда
-  var inputTimeIChangeHandler = function (evt) {
+  validation.inputTimeIChangeHandler = function (evt) {
     var time;
     var timein = form.input.timeIn;
     var timeout = form.input.timeOut;
@@ -58,11 +55,7 @@
       timein.value = time;
     }
   };
-  form.input.timeFildset.addEventListener('input', inputTimeIChangeHandler);
-
-  // синхронизация значений полей Количество комнат/Количество мест
-  makeIsDisabled(form.input.guests);
-  var inputRoomsChangeHandler = function (evt) {
+  validation.inputRoomsChangeHandler = function (evt) {
     makeIsDisabled(form.input.guests);
     form.input.capacity.value = '';
     var options = form.input.guests;
@@ -82,5 +75,8 @@
       }
     }
   };
-  form.input.rooms.addEventListener('input', inputRoomsChangeHandler);
+  validation.settingMinPrice(form.input.type);
+  form.input.type.addEventListener('input', validation.inputTypeChangeHandler);
+  form.input.timeFildset.addEventListener('input', validation.inputTimeIChangeHandler);
+  form.input.rooms.addEventListener('input', validation.inputRoomsChangeHandler);
 })();
