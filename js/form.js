@@ -75,7 +75,17 @@
       }
     }
   };
+  var formSubmitHandler = function (evt) {
+    evt.preventDefault();
+    var adForm = form.adForm;
+    console.log(adForm);
+    var formData = new FormData(adForm);
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', 'https://js.dump.academy/keksobooking');
+    xhr.send(formData);
+  };
   validation.settingMinPrice(form.input.type);
+  form.adForm.addEventListener('submit', formSubmitHandler);
   form.input.type.addEventListener('input', validation.inputTypeChangeHandler);
   form.input.timeFildset.addEventListener('input', validation.inputTimeIChangeHandler);
   form.input.rooms.addEventListener('input', validation.inputRoomsChangeHandler);

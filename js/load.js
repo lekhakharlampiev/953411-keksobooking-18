@@ -2,7 +2,7 @@
 
 (function () {
   window.unLoad = function (url, onSuccess, onError) {
-    var xhr = new this.XMLHttpRequest();
+    var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
     xhr.onload = function () {
       if (xhr.status === 200) {
