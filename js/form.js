@@ -77,8 +77,8 @@
     }
   };
   var formSubmitHandler = function (evt) {
-    evt.preventDefault();
     window.sendForm(form.sendURL, form.adForm);
+    evt.preventDefault();
   };
   validation.settingMinPrice(form.input.type);
   form.adForm.addEventListener('submit', formSubmitHandler);

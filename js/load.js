@@ -18,8 +18,8 @@
     var formToSend = form;
     var formData = new FormData(formToSend);
     var xhr = new XMLHttpRequest();
+    xhr.responseType = 'json';
     xhr.open('POST', url);
     xhr.send(formData);
-    console.log(xhr.response);
   }
 })();
