@@ -14,4 +14,12 @@
     xhr.open('GET', url);
     xhr.send();
   };
+  window.sendForm = function(url, form) {
+    var formToSend = form;
+    var formData = new FormData(formToSend);
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', url);
+    xhr.send(formData);
+    console.log(xhr.response);
+  }
 })();

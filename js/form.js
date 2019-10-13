@@ -13,6 +13,7 @@
   form.input.rooms = form.adForm.querySelector('#room_number');
   form.input.capacity = form.adForm.querySelector('#capacity');
   form.input.guests = form.input.capacity.querySelectorAll('option');
+  form.sendURL = 'https://js.dump.academy/keksobooking';
 
   var makeIsDisabled = function (collection) {
     for (var i = 0; i < collection.length; i++) {
@@ -77,12 +78,7 @@
   };
   var formSubmitHandler = function (evt) {
     evt.preventDefault();
-    var adForm = form.adForm;
-    console.log(adForm);
-    var formData = new FormData(adForm);
-    var xhr = new XMLHttpRequest();
-    xhr.open('POST', 'https://js.dump.academy/keksobooking');
-    xhr.send(formData);
+    window.sendForm(form.sendURL, form.adForm);
   };
   validation.settingMinPrice(form.input.type);
   form.adForm.addEventListener('submit', formSubmitHandler);
