@@ -81,8 +81,8 @@
     var top = y;
     var left = x;
     if (active) {
-      top = y + ' расстояние до острого конца по вертикали';
-      left = x + ' расстояние до острого конца по горизонтали';
+      top = y;
+      left = x;
     }
     var value = left + ', ' + top;
     Dom.formAddress.value = value;
