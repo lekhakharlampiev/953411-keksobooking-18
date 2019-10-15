@@ -78,7 +78,6 @@
   };
   var submitForm = {};
   submitForm.success = function () {
-    console.log('success');
   };
   submitForm.error = function () {
     window.main.prepend(window.errorMassege);
