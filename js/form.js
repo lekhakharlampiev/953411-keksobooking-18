@@ -76,12 +76,20 @@
       }
     }
   };
-  var formSubmitHandler = function (evt) {
-    window.sendForm(form.sendURL, form.adForm);
+  var submitForm = {};
+  submitForm.success = function () {
+    console.log('success');
+  };
+  submitForm.error = function () {
+    window.main.prepend(window.errorMassege);
+  };
+  submitForm.submitHandler = function (evt) {
     evt.preventDefault();
+    form.input.address.removeAttribute('disabled');
+    window.sendForm(form.sendURL, form.adForm, submitForm.success, submitForm.error);
   };
   validation.settingMinPrice(form.input.type);
-  form.adForm.addEventListener('submit', formSubmitHandler);
+  form.adForm.addEventListener('submit', submitForm.submitHandler);
   form.input.type.addEventListener('input', validation.inputTypeChangeHandler);
   form.input.timeFildset.addEventListener('input', validation.inputTimeIChangeHandler);
   form.input.rooms.addEventListener('input', validation.inputRoomsChangeHandler);
