@@ -32,7 +32,7 @@
   generatedMarks.buildingMarks = function (dataArray) {
     var fragment = new DocumentFragment();
     for (var i = 0; i < dataArray.length; i++) {
-      fragment.prepend(generatedMarks.generatedTemplate(dataArray[i]));
+      fragment.append(generatedMarks.generatedTemplate(dataArray[i]));
     }
     return fragment;
   };
