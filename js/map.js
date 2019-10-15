@@ -17,6 +17,7 @@
     Dom.map.classList.remove('map--faded');
     Dom.form.classList.remove('ad-form--disabled');
     markLocation.installPinAddress(Dom.mainPin, true);
+    window.renderPinCards();
     makeIsActivate(Dom.fieldset);
     var initialCoord = {
       x: evt.clientX,
