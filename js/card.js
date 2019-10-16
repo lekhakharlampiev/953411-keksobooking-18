@@ -94,12 +94,26 @@
     }
     var adCard = getDrawAd(adInfo[0]);
     Dom.mapFilter.before(adCard);
+    document.addEventListener('keydown', escKeydownHandler);
+  };
+  var enterKeydownHandler = function (evtEnter) {
+    if (evtEnter.keyCode === 13) {
+      pinButtonClickhandler(evtEnter);
+    }
+    evtEnter.currentTarget.removeEventListener('keydown', enterKeydownHandler);
+  };
+  var escKeydownHandler = function (evt) {
+    if (evt.keyCode === 27) {
+      Dom.adCard.remove();
+    }
+    document.removeEventListener('keydown', escKeydownHandler);
   };
   window.renderPinCards = function () {
     data = window.data.slice();
     pinButtons = Dom.mapPins.querySelectorAll('.map__pin:not(.map__pin--main)');
     pinButtons.forEach(function (elem) {
       elem.addEventListener('click', pinButtonClickhandler);
+      elem.addEventListener('keydown', enterKeydownHandler);
     });
   };
 
