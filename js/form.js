@@ -1,31 +1,20 @@
 'use strict';
 (function () {
-  var form = {};
-  form.adForm = document.querySelector('.ad-form');
-  form.fildsets = form.adForm.querySelectorAll('fieldset');
-  form.input = {};
-  form.input.address = form.adForm.querySelector('input[name="address"]');
-  form.input.type = form.adForm.querySelector('#type');
-  form.input.price = form.adForm.querySelector('#price');
-  form.input.timeFildset = form.adForm.querySelector('.ad-form__element--time');
-  form.input.timeIn = form.adForm.querySelector('#timein');
-  form.input.timeOut = form.adForm.querySelector('#timeout');
-  form.input.rooms = form.adForm.querySelector('#room_number');
-  form.input.capacity = form.adForm.querySelector('#capacity');
-  form.input.guests = form.input.capacity.querySelectorAll('option');
-  form.sendURL = 'https://js.dump.academy/keksobooking';
+  var dom = window.domElements;
+  var inputs = dom.inputs;
+  var sendURL = 'https://js.dump.academy/keksobooking';
 
   var makeIsDisabled = function (collection) {
     for (var i = 0; i < collection.length; i++) {
       collection[i].setAttribute('disabled', 'disabled');
     }
   };
-  makeIsDisabled(form.fildsets);
-  makeIsDisabled(form.input.guests);
+  makeIsDisabled(dom.fieldsets);
+  // makeIsDisabled(inputs.guests);
 
   var validation = {};
   validation.settingMinPrice = function (elem) {
-    var price = form.input.price;
+    var price = inputs.price;
     var minPrice = 0;
     if (elem.value === 'house') {
       minPrice = 5000;
@@ -45,8 +34,8 @@
   };
   validation.inputTimeIChangeHandler = function (evt) {
     var time;
-    var timein = form.input.timeIn;
-    var timeout = form.input.timeOut;
+    var timein = inputs.timeIn;
+    var timeout = inputs.timeOut;
     if (evt.target === timein) {
       time = timein.value;
       timeout.value = time;
@@ -57,9 +46,9 @@
     }
   };
   validation.inputRoomsChangeHandler = function (evt) {
-    makeIsDisabled(form.input.guests);
-    form.input.capacity.value = '';
-    var options = form.input.guests;
+    makeIsDisabled(inputs.guests);
+    inputs.capacity.value = '';
+    var options = inputs.guests;
     var rooms = evt.target.value;
     var lastElement = options.length - 1;
     if (rooms === '100') {
@@ -78,18 +67,19 @@
   };
   var submitForm = {};
   submitForm.success = function () {
+    console.log('success');
   };
   submitForm.error = function () {
     window.main.prepend(window.errorMassege);
   };
   submitForm.submitHandler = function (evt) {
     evt.preventDefault();
-    form.input.address.removeAttribute('disabled');
-    window.sendForm(form.sendURL, form.adForm, submitForm.success, submitForm.error);
+    inputs.address.removeAttribute('disabled');
+    window.sendForm(sendURL, dom.form, submitForm.success, submitForm.error);
   };
-  validation.settingMinPrice(form.input.type);
-  form.adForm.addEventListener('submit', submitForm.submitHandler);
-  form.input.type.addEventListener('input', validation.inputTypeChangeHandler);
-  form.input.timeFildset.addEventListener('input', validation.inputTimeIChangeHandler);
-  form.input.rooms.addEventListener('input', validation.inputRoomsChangeHandler);
+  validation.settingMinPrice(inputs.type);
+  dom.form.addEventListener('submit', submitForm.submitHandler);
+  inputs.type.addEventListener('input', validation.inputTypeChangeHandler);
+  inputs.timeFildset.addEventListener('input', validation.inputTimeIChangeHandler);
+  inputs.rooms.addEventListener('input', validation.inputRoomsChangeHandler);
 })();

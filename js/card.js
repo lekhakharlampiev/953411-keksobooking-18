@@ -1,18 +1,13 @@
 'use strict';
 (function () {
-  var Dom = {};
-  Dom.map = document.querySelector('.map');
-  Dom.mapFilter = Dom.map.querySelector('.map__filters-container');
-  Dom.mapPins = Dom.map.querySelector('.map__pins');
-  Dom.cardTamplate = document.querySelector('#card').content;
-  Dom.card = Dom.cardTamplate.querySelector('.map__card');
-  Dom.adCard = null;
+  var dom = window.domElements;
+  var newadCard = null;
   var data = [];
   var pinButtons = [];
 
   var getDrawAd = function (element) {
     var clone = {};
-    clone.card = Dom.card.cloneNode(true);
+    clone.card = dom.adCard.cloneNode(true);
     clone.avatar = clone.card.querySelector('.popup__avatar');
     clone.title = clone.card.querySelector('.popup__title');
     clone.address = clone.card.querySelector('.popup__text--address');
@@ -25,7 +20,7 @@
     clone.photos = clone.card.querySelector('.popup__photos');
     clone.photo = clone.photos.querySelector('.popup__photo');
     clone.close = clone.card.querySelector('.popup__close');
-    Dom.adCard = clone.card;
+    newadCard = clone.card;
     var closeClickHandler = function (evt) {
       evt.preventDefault();
       clone.card.remove();
@@ -89,11 +84,11 @@
     var adInfo = data.filter(function (item) {
       return item.offer.title === title;
     });
-    if (Dom.adCard !== null) {
-      Dom.adCard.remove();
+    if (newadCard !== null) {
+      newadCard.remove();
     }
     var adCard = getDrawAd(adInfo[0]);
-    Dom.mapFilter.before(adCard);
+    dom.mapFilter.before(adCard);
     document.addEventListener('keydown', escKeydownHandler);
   };
   var enterKeydownHandler = function (evtEnter) {
@@ -104,13 +99,13 @@
   };
   var escKeydownHandler = function (evt) {
     if (evt.keyCode === 27) {
-      Dom.adCard.remove();
+      newadCard.remove();
     }
     document.removeEventListener('keydown', escKeydownHandler);
   };
   window.renderPinCards = function () {
     data = window.data.slice();
-    pinButtons = Dom.mapPins.querySelectorAll('.map__pin:not(.map__pin--main)');
+    pinButtons = dom.pinsMap.querySelectorAll('.map__pin:not(.map__pin--main)');
     pinButtons.forEach(function (elem) {
       elem.addEventListener('click', pinButtonClickhandler);
       elem.addEventListener('keydown', enterKeydownHandler);

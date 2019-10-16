@@ -1,18 +1,13 @@
 'use strict';
 (function () {
-  var Dom = {};
-  Dom.map = document.querySelector('.map');
-  Dom.form = document.querySelector('.ad-form');
-  Dom.fieldset = Dom.form.querySelectorAll('fieldset');
-  Dom.formAddress = Dom.form.querySelector('input[name="address"]');
-  Dom.mainPin = Dom.map.querySelector('.map__pin--main');
+  var dom = window.domElements;
   var mapSize = {
-    width: Dom.map.getBoundingClientRect().width,
-    height: Dom.map.getBoundingClientRect().height
+    width: dom.map.getBoundingClientRect().width,
+    height: dom.map.getBoundingClientRect().height
   };
   var mainPinSize = {};
-  mainPinSize.width = Dom.mainPin.getBoundingClientRect().width;
-  mainPinSize.height = Dom.mainPin.getBoundingClientRect().height;
+  mainPinSize.width = dom.mainPin.getBoundingClientRect().width;
+  mainPinSize.height = dom.mainPin.getBoundingClientRect().height;
   mainPinSize.lowelLimitMove = mapSize.height - mainPinSize.height;
   mainPinSize.rightLimitMove = mapSize.width - mainPinSize.width;
   var makeIsActivate = function (collection) {
@@ -22,19 +17,19 @@
   };
   var mainPinMousedownHandler = function (evt) {
     evt.preventDefault();
-    Dom.map.classList.remove('map--faded');
-    Dom.form.classList.remove('ad-form--disabled');
-    markLocation.installPinAddress(Dom.mainPin, true);
+    dom.map.classList.remove('map--faded');
+    dom.form.classList.remove('ad-form--disabled');
+    markLocation.installPinAddress(dom.mainPin, true);
     window.renderPinCards();
-    makeIsActivate(Dom.fieldset);
+    makeIsActivate(dom.fieldsets);
     var initialCoord = {
       x: evt.clientX,
       y: evt.clientY
     };
     var maimPinMouseMovehandler = function (moveEvt) {
       moveEvt.preventDefault();
-      var top = Dom.mainPin.offsetTop;
-      var left = Dom.mainPin.offsetLeft;
+      var top = dom.mainPin.offsetTop;
+      var left = dom.mainPin.offsetLeft;
       var moveTop = moveEvt.clientY;
       var moveLeft = moveEvt.clientX;
       if (top <= 0) {
@@ -59,9 +54,9 @@
       };
       var styleTop = (top - offset.y) + 'px';
       var styleLeft = (left - offset.x) + 'px';
-      markLocation.installPinAddress(Dom.mainPin, true);
-      Dom.mainPin.style.top = styleTop;
-      Dom.mainPin.style.left = styleLeft;
+      markLocation.installPinAddress(dom.mainPin, true);
+      dom.mainPin.style.top = styleTop;
+      dom.mainPin.style.left = styleLeft;
     };
     var maimPinMouseUphandler = function (upEvt) {
       upEvt.preventDefault();
@@ -72,8 +67,8 @@
     document.addEventListener('mouseup', maimPinMouseUphandler);
 
   };
-  Dom.mainPin.addEventListener('mousedown', mainPinMousedownHandler);
-  Dom.mainPin.addEventListener('keydown', function (evt) {
+  dom.mainPin.addEventListener('mousedown', mainPinMousedownHandler);
+  dom.mainPin.addEventListener('keydown', function (evt) {
     if (evt.keyCode === 13) {
       mainPinMousedownHandler();
     }
@@ -94,7 +89,7 @@
     return markCoordinate;
   };
   markLocation.getPinHeight = function (mark) { // высота главной метки состоит
-    var img = Dom.mainPin.querySelector('img'); // из высоты картинки внутри  метки без отступов +
+    var img = dom.mainPin.querySelector('img'); // из высоты картинки внутри  метки без отступов +
     var pinAfterStyle = getComputedStyle(mark, '::after'); // высота псевдоэлемента
     var imgHeight = img.clientHeight;
     var afterHeight = parseInt(pinAfterStyle.height, 10);
@@ -113,8 +108,8 @@
       left = x;
     }
     var value = left + ', ' + top;
-    Dom.formAddress.value = value;
+    dom.inputs.address.value = value;
   };
-  markLocation.installPinAddress(Dom.mainPin, false);
+  markLocation.installPinAddress(dom.mainPin, false);
   window.markLocation = markLocation;
 })();
