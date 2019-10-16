@@ -3,7 +3,8 @@
   var templates = {
     pin: document.querySelector('#pin').content,
     adCard: document.querySelector('#card').content,
-    errorMassage: document.querySelector('#error').content
+    errorMassage: document.querySelector('#error').content,
+    successMassage: document.querySelector('#success').content
   };
   var domElements = {};
   domElements.main = document.querySelector('main');
@@ -14,6 +15,7 @@
   domElements.mainPin = domElements.map.querySelector('.map__pin--main');
   domElements.pin = templates.pin.querySelector('.map__pin');
   domElements.error = templates.errorMassage.querySelector('.error');
+  domElements.success = templates.successMassage.querySelector('.success');
   domElements.form = document.querySelector('.ad-form');
   domElements.fieldsets = domElements.form.querySelectorAll('fieldset');
   domElements.inputs = {};

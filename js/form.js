@@ -67,10 +67,10 @@
   };
   var submitForm = {};
   submitForm.success = function () {
-    console.log('success');
+    dom.main.prepend(dom.success);
   };
   submitForm.error = function () {
-    window.main.prepend(window.errorMassege);
+    dom.main.prepend(dom.errorMassege);
   };
   submitForm.submitHandler = function (evt) {
     evt.preventDefault();
