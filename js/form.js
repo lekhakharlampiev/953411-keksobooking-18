@@ -65,9 +65,17 @@
       }
     }
   };
+  var successKeydownHandler = function (evt) {
+    if (evt.keyCode === 27) {
+      dom.success.remove();
+    }
+    document.removeEventListener('keydown', successKeydownHandler);
+  };
   var submitForm = {};
   submitForm.success = function () {
     dom.main.prepend(dom.success);
+    document.addEventListener('keydown', successKeydownHandler);
+    window.pageToInactive();
   };
   submitForm.error = function () {
     dom.main.prepend(dom.errorMassege);
