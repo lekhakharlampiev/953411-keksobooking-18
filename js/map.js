@@ -1,6 +1,7 @@
 'use strict';
 (function () {
   var dom = window.domElements;
+  var markLocation = window.markLocation;
   var mapSize = {
     width: dom.map.getBoundingClientRect().width,
     height: dom.map.getBoundingClientRect().height
@@ -17,10 +18,7 @@
   };
   var mainPinMousedownHandler = function (evt) {
     evt.preventDefault();
-    dom.map.classList.remove('map--faded');
-    dom.form.classList.remove('ad-form--disabled');
-    markLocation.installPinAddress(dom.mainPin, true);
-    window.renderPinCards();
+    window.pageToActive();
     makeIsActivate(dom.fieldsets);
     var initialCoord = {
       x: evt.clientX,
@@ -73,43 +71,4 @@
       mainPinMousedownHandler();
     }
   });
-  var markLocation = {};
-  markLocation.getMarkCoord = function (mark, active) {
-    var markRect = mark.getBoundingClientRect();
-    var parameters = {
-      markX: markRect.x,
-      markY: markRect.y,
-      halfHeight: markRect.height / 2,
-      halfWidth: markRect.width / 2,
-      pinHeight: markLocation.getPinHeight(mark),
-    };
-    var markCoordinate = {};
-    markCoordinate.x = parameters.markX + parameters.halfWidth;
-    markCoordinate.y = active ? parameters.markY + parameters.pinHeight : parameters.markY + parameters.halfHeight;
-    return markCoordinate;
-  };
-  markLocation.getPinHeight = function (mark) { // высота главной метки состоит
-    var img = dom.mainPin.querySelector('img'); // из высоты картинки внутри  метки без отступов +
-    var pinAfterStyle = getComputedStyle(mark, '::after'); // высота псевдоэлемента
-    var imgHeight = img.clientHeight;
-    var afterHeight = parseInt(pinAfterStyle.height, 10);
-    var pinHeight = afterHeight + imgHeight;
-    mainPinSize.height = pinHeight;
-    return pinHeight;
-  };
-  markLocation.installPinAddress = function (pinMap, active) {
-    var coordinate = markLocation.getMarkCoord(pinMap, active);
-    var y = Math.floor(coordinate.y);
-    var x = Math.floor(coordinate.x);
-    var top = y;
-    var left = x;
-    if (active) {
-      top = y;
-      left = x;
-    }
-    var value = left + ', ' + top;
-    dom.inputs.address.value = value;
-  };
-  markLocation.installPinAddress(dom.mainPin, false);
-  window.markLocation = markLocation;
 })();

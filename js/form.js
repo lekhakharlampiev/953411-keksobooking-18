@@ -3,15 +3,7 @@
   var dom = window.domElements;
   var inputs = dom.inputs;
   var sendURL = 'https://js.dump.academy/keksobooking';
-
-  var makeIsDisabled = function (collection) {
-    for (var i = 0; i < collection.length; i++) {
-      collection[i].setAttribute('disabled', 'disabled');
-    }
-  };
-  makeIsDisabled(dom.fieldsets);
-  // makeIsDisabled(inputs.guests);
-
+  var makeDisabled = window.makeDisabled;
   var validation = {};
   validation.settingMinPrice = function (elem) {
     var price = inputs.price;
@@ -46,7 +38,7 @@
     }
   };
   validation.inputRoomsChangeHandler = function (evt) {
-    makeIsDisabled(inputs.guests);
+    makeDisabled(inputs.guests);
     inputs.capacity.value = '';
     var options = inputs.guests;
     var rooms = evt.target.value;
@@ -71,9 +63,14 @@
     }
     document.removeEventListener('keydown', successKeydownHandler);
   };
+  var successClickHandler = function () {
+    dom.success.remove();
+    document.removeEventListener('click', successClickHandler);
+  };
   var submitForm = {};
   submitForm.success = function () {
     dom.main.prepend(dom.success);
+    document.addEventListener('click', successClickHandler);
     document.addEventListener('keydown', successKeydownHandler);
     window.pageToInactive();
   };

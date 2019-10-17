@@ -1,9 +1,20 @@
 'use strict';
 (function () {
   var dom = window.domElements;
+  var markLocation = window.markLocation;
+  var generated = window.generatedMarks;
+  var dataLoad = [];
+  var URL = 'https://js.dump.academy/keksobooking/data';
+  var makeDisabled = function (collection) {
+    for (var i = 0; i < collection.length; i++) {
+      collection[i].setAttribute('disabled', 'disabled');
+    }
+  };
+  makeDisabled(dom.fieldsets);
+  window.makeDisabled = makeDisabled;
   var startCoord = {
-    x: dom.mainPin.getBoundingClientRect().x,
-    y: dom.mainPin.getBoundingClientRect().y
+    x: dom.mainPin.style.left,
+    y: dom.mainPin.style.top
   };
   var stepsDeactivation = {
     toClearInputs: function (container) {
@@ -31,16 +42,35 @@
       });
     },
     returnPinstartCoord: function () {
-      var x = startCoord.x + 'px';
-      var y = startCoord.y + 'px';
+      var x = startCoord.x;
+      var y = startCoord.y;
       dom.mainPin.style.top = y;
       dom.mainPin.style.left = x;
     },
+  };
+  var loading = {};
+  loading.onError = function () {
+    dom.main.prepend(window.errorMassege);
+  };
+  loading.onSuccess = function (data) {
+    dataLoad = data;
+    window.data = dataLoad;
+    var ads = generated.buildingMarks(data);
+    dom.pinsMap.prepend(ads);
+    dom.map.classList.remove('map--faded');
+    dom.form.classList.remove('ad-form--disabled');
+    window.renderPinCards();
+    markLocation.installPinAddress(dom.mainPin, true);
   };
   window.pageToInactive = function () {
     stepsDeactivation.toClearInputs(dom.fieldsets);
     stepsDeactivation.toClearMaps();
     stepsDeactivation.returnPinstartCoord();
     dom.map.classList.add('map--faded');
+    dom.form.classList.add('ad-form--disabled');
+    makeDisabled(dom.fieldsets);
+  };
+  window.pageToActive = function () {
+    window.unLoad(URL, loading.onSuccess, loading.onError);
   };
 })();

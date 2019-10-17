@@ -1,7 +1,5 @@
 'use strict';
 (function () {
-  var URL = 'https://js.dump.academy/keksobooking/data';
-  var dataLoad = [];
   var dom = window.domElements;
   var buildDomFragment = function (template) {
     var fragment = new DocumentFragment();
@@ -27,15 +25,44 @@
     }
     return fragment;
   };
-  var onSuccess = function (data) {
-    dataLoad = data;
-    window.data = dataLoad;
-    var similarAds = generatedMarks.buildingMarks(dataLoad);
-    dom.pinsMap.prepend(similarAds);
+  var markLocation = {};
+  markLocation.getMarkCoord = function (mark, active) {
+    var markRect = mark.getBoundingClientRect();
+    var parameters = {
+      markX: markRect.x,
+      markY: markRect.y,
+      halfHeight: markRect.height / 2,
+      halfWidth: markRect.width / 2,
+      pinHeight: markLocation.getPinHeight(mark),
+    };
+    var markCoordinate = {};
+    markCoordinate.x = parameters.markX + parameters.halfWidth;
+    markCoordinate.y = active ? parameters.markY + parameters.pinHeight : parameters.markY + parameters.halfHeight;
+    return markCoordinate;
   };
-  var onError = function () {
-    dom.main.prepend(window.errorMassege);
+  markLocation.getPinHeight = function (mark) { // высота главной метки состоит
+    var img = dom.mainPin.querySelector('img'); // из высоты картинки внутри  метки без отступов +
+    var pinAfterStyle = getComputedStyle(mark, '::after'); // высота псевдоэлемента
+    var imgHeight = img.clientHeight;
+    var afterHeight = parseInt(pinAfterStyle.height, 10);
+    var pinHeight = afterHeight + imgHeight;
+    return pinHeight;
   };
+  markLocation.installPinAddress = function (pinMap, active) {
+    var coordinate = markLocation.getMarkCoord(pinMap, active);
+    var y = Math.floor(coordinate.y);
+    var x = Math.floor(coordinate.x);
+    var top = y;
+    var left = x;
+    if (active) {
+      top = y;
+      left = x;
+    }
+    var value = left + ', ' + top;
+    dom.inputs.address.value = value;
+  };
+  markLocation.installPinAddress(dom.mainPin, false);
+  window.markLocation = markLocation;
+  window.generatedMarks = generatedMarks;
   window.errorMassege = buildDomFragment(dom.error);
-  window.data = window.unLoad(URL, onSuccess, onError);
 })();
