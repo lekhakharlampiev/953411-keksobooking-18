@@ -74,4 +74,5 @@
   window.pageToActive = function () {
     window.unLoad(URL, loading.onSuccess, loading.onError);
   };
+  window.clearMaps = stepsDeactivation.toClearMaps;
 })();

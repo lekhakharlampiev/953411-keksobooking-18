@@ -19,8 +19,9 @@
     return clonePin;
   };
   generatedMarks.buildingMarks = function (dataArray) {
+    var dataLength = dataArray.length > 5 ? 5 : dataArray.length;
     var fragment = new DocumentFragment();
-    for (var i = 0; i < 5; i++) {
+    for (var i = 0; i < dataLength; i++) {
       fragment.append(generatedMarks.generatedTemplate(dataArray[i]));
     }
     return fragment;
