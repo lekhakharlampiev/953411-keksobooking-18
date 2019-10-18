@@ -18,7 +18,9 @@
   };
   var mainPinMousedownHandler = function (evt) {
     evt.preventDefault();
-    window.pageToActive();
+    if (dom.map.classList.contains('map--faded')) {
+      window.pageToActive();
+    }
     makeIsActivate(dom.fieldsets);
     var initialCoord = {
       x: evt.clientX,

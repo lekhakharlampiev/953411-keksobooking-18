@@ -16,6 +16,10 @@
   domElements.pin = templates.pin.querySelector('.map__pin');
   domElements.error = templates.errorMassage.querySelector('.error');
   domElements.success = templates.successMassage.querySelector('.success');
+  domElements.filter = {};
+  domElements.filter.form = document.querySelector('.map__filters');
+  domElements.filter.selects = domElements.filter.form.querySelectorAll('select');
+  domElements.filter.checkbox = domElements.filter.form.querySelectorAll('.map__checkbox');
   domElements.form = document.querySelector('.ad-form');
   domElements.fieldsets = domElements.form.querySelectorAll('fieldset');
   domElements.formReset = domElements.form.querySelector('.ad-form__reset');

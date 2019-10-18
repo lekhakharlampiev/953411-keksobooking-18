@@ -3,7 +3,7 @@
   var dom = window.domElements;
   var markLocation = window.markLocation;
   var generated = window.generatedMarks;
-  var dataLoad = [];
+  window.data = [];
   var URL = 'https://js.dump.academy/keksobooking/data';
   var makeDisabled = function (collection) {
     for (var i = 0; i < collection.length; i++) {
@@ -53,7 +53,7 @@
     dom.main.prepend(window.errorMassege);
   };
   loading.onSuccess = function (data) {
-    dataLoad = data;
+    var dataLoad = data;
     window.data = dataLoad;
     var ads = generated.buildingMarks(data);
     dom.pinsMap.prepend(ads);
@@ -61,6 +61,7 @@
     dom.form.classList.remove('ad-form--disabled');
     window.renderPinCards();
     markLocation.installPinAddress(dom.mainPin, true);
+    window.startingFilter();
   };
   window.pageToInactive = function () {
     stepsDeactivation.toClearInputs(dom.fieldsets);

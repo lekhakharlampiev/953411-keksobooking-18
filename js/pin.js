@@ -20,7 +20,7 @@
   };
   generatedMarks.buildingMarks = function (dataArray) {
     var fragment = new DocumentFragment();
-    for (var i = 0; i < dataArray.length; i++) {
+    for (var i = 0; i < 5; i++) {
       fragment.append(generatedMarks.generatedTemplate(dataArray[i]));
     }
     return fragment;
