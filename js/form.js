@@ -5,6 +5,7 @@
   var sendURL = 'https://js.dump.academy/keksobooking';
   var makeDisabled = window.makeDisabled;
   var validation = {};
+  var pageInActive = window.pageToInactive;
   validation.settingMinPrice = function (elem) {
     var price = inputs.price;
     var minPrice = 0;
@@ -67,6 +68,10 @@
     dom.success.remove();
     document.removeEventListener('click', successClickHandler);
   };
+  var buttonResetClickHandler = function (evt) {
+    evt.preventDefault();
+    pageInActive();
+  };
   var submitForm = {};
   submitForm.success = function () {
     dom.main.prepend(dom.success);
@@ -84,6 +89,7 @@
   };
   validation.settingMinPrice(inputs.type);
   dom.form.addEventListener('submit', submitForm.submitHandler);
+  dom.formReset.addEventListener('click', buttonResetClickHandler);
   inputs.type.addEventListener('input', validation.inputTypeChangeHandler);
   inputs.timeFildset.addEventListener('input', validation.inputTimeIChangeHandler);
   inputs.rooms.addEventListener('input', validation.inputRoomsChangeHandler);

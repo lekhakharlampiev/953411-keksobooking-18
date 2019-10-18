@@ -18,6 +18,7 @@
   domElements.success = templates.successMassage.querySelector('.success');
   domElements.form = document.querySelector('.ad-form');
   domElements.fieldsets = domElements.form.querySelectorAll('fieldset');
+  domElements.formReset = domElements.form.querySelector('.ad-form__reset');
   domElements.inputs = {};
   domElements.inputs.address = domElements.form.querySelector('#address');
   domElements.inputs.type = domElements.form.querySelector('#type');
