@@ -6,19 +6,23 @@
   var data = [];
   var values = [];
   var inputs = [];
-  var getNewData = function (arr) {
-    var result = data.filter(function (item) {
-      return item.offer.type === arr.type;
+  var getSimilarAdd = function (arr1, dataArr) {
+    var ratings = [];
+    dataArr.forEach(function (item) {
+      var count = 0;
+      arr1.forEach(function (elem, i) {
+        if ((item.offer[elem] + '') === values[i]) {
+          count += 1;
+        }
+      });
+      ratings.push(count);
     });
-    return result;
+    console.log(ratings);
   };
-  var getResult = function () {
-    var result = {};
-    inputs.forEach(function (id, i) {
-      var key = id.substring(8);
-      result[key] = values[i];
+  var getNewKeys = function (arr) {
+    return arr.map(function (item) {
+      return item.substring(8);
     });
-    return result;
   };
   var getFilterValues = function (elem) {
     var id = elem.getAttribute('id');
@@ -36,14 +40,9 @@
   var filterInputHandler = function (evt) {
     var element = evt.currentTarget;
     getFilterValues(element);
-    var sortObject = getResult();
-    var newData = data;
-    if (element.value !== 'any') {
-      newData = getNewData(sortObject);
-    }
+    var newInputs = getNewKeys(inputs);
+    getSimilarAdd(newInputs, data);
     window.clearMaps();
-    var ads = generated.buildingMarks(newData);
-    dom.pinsMap.prepend(ads);
   };
   var addListener = function (elem) {
     elem.forEach(function (item) {
