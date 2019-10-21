@@ -6,18 +6,50 @@
   var data = [];
   var values = [];
   var inputs = [];
-  var getSimilarAdd = function (arr1, dataArr) {
+  var getMaxRatingElements = function (dataArr) {
+    var addSimilars = [];
+    var rating = getRatingSimilars(dataArr);
+    var newData = dataArr.slice();
+    var maxRaitings = rating;
+    var maxSimilar = Math.max.apply(null, maxRaitings);
+    var index = maxRaitings.indexOf(maxSimilar);
+    if (maxSimilar > 0) {
+      addSimilars.push(newData[index]);
+      newData.splice(index, 1);
+      maxRaitings.splice(index, 1);
+    }
+    maxRaitings.forEach(function (item, i) {
+      var max = maxSimilar;
+      if (item === max) {
+        addSimilars.push(newData[i]);
+      }
+    });
+    return addSimilars;
+  };
+  var getRatingSimilars = function (dataArr) {
+    var arr = dataArr;
+    var filtered = getNewKeys(inputs);
     var ratings = [];
-    dataArr.forEach(function (item) {
+    arr.forEach(function (item) {
       var count = 0;
-      arr1.forEach(function (elem, i) {
-        if ((item.offer[elem] + '') === values[i]) {
+      filtered.forEach(function (elem, i) {
+        var value = item.offer[elem];
+        if (value < 10000) {
+          value = 'low';
+        }
+        if (value >= 10000 && value <= 50000) {
+          value = 'middle';
+        }
+        if (value > 50000) {
+          value = 'high';
+        }
+        if ((value + '') === values[i]) {
           count += 1;
         }
       });
       ratings.push(count);
     });
-    console.log(ratings);
+    return ratings;
   };
   var getNewKeys = function (arr) {
     return arr.map(function (item) {
@@ -38,11 +70,13 @@
     }
   };
   var filterInputHandler = function (evt) {
+    window.clearMaps();
     var element = evt.currentTarget;
     getFilterValues(element);
-    var newInputs = getNewKeys(inputs);
-    getSimilarAdd(newInputs, data);
-    window.clearMaps();
+    var newData = getMaxRatingElements(data);
+    var ads = generated.buildingMarks(newData);
+    dom.pinsMap.prepend(ads);
+    window.renderPinCards();
   };
   var addListener = function (elem) {
     elem.forEach(function (item) {
@@ -53,5 +87,4 @@
     addListener(filter.selects);
     data = window.data;
   };
-
 })();

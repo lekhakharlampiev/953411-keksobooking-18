@@ -36,7 +36,10 @@
     },
     toClearMaps: function () {
       var allPins = dom.pinsMap.querySelectorAll('.map__pin:not(.map__pin--main)');
-      dom.adCard.remove();
+      var adCard = document.querySelector('.map__card');
+      if (adCard) {
+        adCard.remove();
+      }
       allPins.forEach(function (elem) {
         elem.remove();
       });
