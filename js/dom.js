@@ -20,6 +20,10 @@
   domElements.filter.form = document.querySelector('.map__filters');
   domElements.filter.selects = domElements.filter.form.querySelectorAll('select');
   domElements.filter.checkbox = domElements.filter.form.querySelectorAll('.map__checkbox');
+  domElements.filter.type = domElements.filter.form.querySelector('#housing-type');
+  domElements.filter.price = domElements.filter.form.querySelector('#housing-price');
+  domElements.filter.rooms = domElements.filter.form.querySelector('#housing-rooms');
+  domElements.filter.guests = domElements.filter.form.querySelector('#housing-guests');
   domElements.form = document.querySelector('.ad-form');
   domElements.fieldsets = domElements.form.querySelectorAll('fieldset');
   domElements.formReset = domElements.form.querySelector('.ad-form__reset');

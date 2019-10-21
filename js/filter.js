@@ -4,88 +4,102 @@
   var filter = dom.filter;
   var generated = window.generatedMarks;
   var data = [];
-  var values = [];
-  var inputs = [];
-  var getMaxRatingElements = function (dataArr) {
-    var addSimilars = [];
-    var rating = getRatingSimilars(dataArr);
-    var newData = dataArr.slice();
-    var maxRaitings = rating;
-    var maxSimilar = Math.max.apply(null, maxRaitings);
-    var index = maxRaitings.indexOf(maxSimilar);
-    if (maxSimilar > 0) {
-      addSimilars.push(newData[index]);
-      newData.splice(index, 1);
-      maxRaitings.splice(index, 1);
-    }
-    maxRaitings.forEach(function (item, i) {
-      var max = maxSimilar;
-      if (item === max) {
-        addSimilars.push(newData[i]);
-      }
-    });
-    return addSimilars;
-  };
-  var getRatingSimilars = function (dataArr) {
-    var arr = dataArr;
-    var filtered = getNewKeys(inputs);
-    var ratings = [];
-    arr.forEach(function (item) {
+  var getRatingOfSimilar = function () {
+    var filterValues = getAllValuesInputs();
+    var interData = data;
+    var rating = [];
+    var isIncludes = function (arr1, arr2) {
       var count = 0;
-      filtered.forEach(function (elem, i) {
-        var value = item.offer[elem];
-        if (value < 10000) {
-          value = 'low';
-        }
-        if (value >= 10000 && value <= 50000) {
-          value = 'middle';
-        }
-        if (value > 50000) {
-          value = 'high';
-        }
-        if ((value + '') === values[i]) {
+      arr1.forEach(function (elem) {
+        if (arr2.includes(elem)) {
           count += 1;
         }
       });
-      ratings.push(count);
+      return count; 
+    };
+    var getElemRating = function (item, index) {
+      var rang = 0
+      var type = item.offer.type;
+      var price = item.offer.price;
+      var rooms = item.offer.rooms + '';
+      var guests = item.offer.guests + '';
+      var features = item.offer.features;
+      var priceVal;
+      if (price < 10000) {
+          priceVal = 'low';
+        }
+        if (price >= 10000 && price <= 50000) {
+          priceVal = 'middle';
+        }
+        if (price > 50000) {
+          priceVal = 'high';
+        }
+      if (filterValues.type === type) {
+        rang += 1;
+      }
+      if (filterValues.price === priceVal) {
+        rang += 1;
+      }
+      if (filterValues.rooms === rooms) {
+        rang += 1;
+      }
+      if (filterValues.guests === guests) {
+        rang += 1;
+      }
+      if (filterValues.price === priceVal) {
+        rang += 1;
+      }
+      if (isIncludes(filterValues.features, features) > 0) {
+        rang += isIncludes(filterValues.features, features);
+      }
+      var result = [rang, index];
+      return result;
+    };
+    interData.forEach(function (elem, i) {
+      rating.push(getElemRating(elem, i));
     });
-    return ratings;
-  };
-  var getNewKeys = function (arr) {
-    return arr.map(function (item) {
-      return item.substring(8);
-    });
-  };
-  var getFilterValues = function (elem) {
-    var id = elem.getAttribute('id');
-    var value = elem.value;
-    if (elem.getAttribute('name') === 'features') {
+    console.log(rating);
+  }
+  var getValue = {
+    selectValue: function (element) {
+      var input = element;
+      var value = input.value;
+      if (value === 'any') {
+        value = '';
+      }
+      return value;
+    },
+    checkboxValue: function () {
       var checked = filter.form.querySelectorAll('.map__checkbox:checked');
-      var features = [];
-      checked.forEach(function (item) {
-        features.push(item.value);
+      var values = [];
+      checked.forEach(function (elem) {
+        values.push(elem.value);
       });
-      id = 'features';
-      value = features;
-    }
-    if (inputs.includes(id) || value === 'any') {
-      var index = inputs.indexOf(id);
-      inputs.splice(index, 1);
-      values.splice(index, 1);
-    }
-    if (value !== 'any') {
-      inputs.push(id);
-      values.push(value);
+      return values;
     }
   };
+  var getAllValuesInputs = function () {
+    var inputType = getValue.selectValue(filter.type);
+    var inputPrice = getValue.selectValue(filter.price);
+    var inputRooms = getValue.selectValue(filter.rooms);
+    var inputGuest = getValue.selectValue(filter.guests);
+    var inputsFeatures = getValue.checkboxValue();
+    var filterValues = {
+      type: inputType,
+      price: inputPrice,
+      rooms: inputRooms,
+      guests: inputGuest,
+      features: inputsFeatures 
+    };
+    return filterValues;
+  }
   var filterInputHandler = function (evt) {
-    window.clearMaps();
     var element = evt.currentTarget;
-    getFilterValues(element);
-    var newData = getMaxRatingElements(data);
-    var ads = generated.buildingMarks(newData);
-    dom.pinsMap.prepend(ads);
-    window.renderPinCards();
+    getRatingOfSimilar();
+    // var ads = generated.buildingMarks(newData);
+    // window.clearMaps();
+    // dom.pinsMap.prepend(ads);
+    // window.renderPinCards();
   };
   var addListener = function (elem) {
     elem.forEach(function (item) {
