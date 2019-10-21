@@ -59,14 +59,23 @@
   var getFilterValues = function (elem) {
     var id = elem.getAttribute('id');
     var value = elem.value;
+    if (elem.getAttribute('name') === 'features') {
+      var checked = filter.form.querySelectorAll('.map__checkbox:checked');
+      var features = [];
+      checked.forEach(function (item) {
+        features.push(item.value);
+      });
+      id = 'features';
+      value = features;
+    }
     if (inputs.includes(id) || value === 'any') {
       var index = inputs.indexOf(id);
       inputs.splice(index, 1);
       values.splice(index, 1);
     }
     if (value !== 'any') {
-      inputs.push(elem.id);
-      values.push(elem.value);
+      inputs.push(id);
+      values.push(value);
     }
   };
   var filterInputHandler = function (evt) {
@@ -85,6 +94,7 @@
   };
   window.startingFilter = function () {
     addListener(filter.selects);
+    addListener(filter.checkbox);
     data = window.data;
   };
 })();
