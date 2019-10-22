@@ -20,46 +20,50 @@
     clone.photos = clone.card.querySelector('.popup__photos');
     clone.photo = clone.photos.querySelector('.popup__photo');
     clone.close = clone.card.querySelector('.popup__close');
-    newadCard = clone.card;
     var closeClickHandler = function (evt) {
       evt.preventDefault();
       clone.card.remove();
+      clone.close.removeEventListener('click', closeClickHandler);
     };
+    var getTranslationType = function (type) {
+      var translate = '';
+      switch (type) {
+        case 'bungalo':
+          translate = 'Бунгало';
+          break;
+        case 'palace':
+          translate = 'Дворец';
+          break;
+        case 'house':
+          translate = 'Дом';
+          break;
+        case 'flat':
+          translate = 'Квартира';
+          break;
+      }
+      return translate;
+    };
+    var getPhotos = function (srcArr) {
+      clone.photo.remove();
+      srcArr.forEach(function (elem) {
+        var photo = clone.photo.cloneNode(true);
+        photo.src = elem;
+        clone.photos.prepend(photo);
+      });
+    };
+    getPhotos(element.offer.photos);
+    var typeOfHouse = getTranslationType(element.offer.type);
+    var dataFeature = element.offer.features;
+    var features = clone.features.querySelectorAll('.popup__feature');
     clone.close.addEventListener('click', closeClickHandler);
+    features.forEach(function (elem) {
+      var option = elem.getAttribute('class').slice(31);
+      if (!dataFeature.includes(option)) {
+        elem.remove();
+      }
+    });
+    newadCard = clone.card;
     clone.avatar.src = element.author.avatar;
-    var typeOfHouse = '';
-    switch (element.offer.type) {
-      case 'bungalo':
-        typeOfHouse = 'Бунгало';
-        break;
-      case 'palace':
-        typeOfHouse = 'Дворец';
-        break;
-      case 'house':
-        typeOfHouse = 'Дом';
-        break;
-      case 'flat':
-        typeOfHouse = 'Квартира';
-        break;
-    }
-    var adFeature = element.offer.features;
-    var allFeatures = clone.features.querySelectorAll('.popup__feature');
-
-    var itIncludes = function (arr, elem) {
-      for (var i = 0; i < arr.length; i++) {
-        if (arr[i] === elem) {
-          return true;
-        }
-      }
-      return false;
-    };
-    for (var i = 0; i < allFeatures.length; i++) {
-      var option = allFeatures[i].getAttribute('class').slice(31);
-      if (!itIncludes(adFeature, option)) {
-        allFeatures[i].remove();
-      }
-    }
-
     clone.title.textContent = element.offer.title;
     clone.address.textContent = element.offer.address;
     clone.price.firstChild.data = element.offer.price + '₽';
@@ -67,18 +71,9 @@
     clone.capacity.textContent = element.offer.rooms + ' комнат(а)ы для ' + element.offer.guests + ' гост(я)ей';
     clone.checkTime.textContent = 'Заезд после ' + element.offer.checkin + ', выезд до ' + element.offer.checkout;
     clone.description.textContent = element.offer.description;
-
-    var photosSrc = element.offer.photos;
-    var photo = clone.photo.cloneNode();
-    clone.photo.remove();
-    for (var a = 0; a < photosSrc.length; a++) {
-      var copy = photo.cloneNode();
-      copy.src = photosSrc[a];
-      clone.photos.prepend(copy);
-    }
-
     return clone.card;
   };
+
   var pinButtonClickhandler = function (evt) {
     var title = evt.currentTarget.firstElementChild.getAttribute('alt');
     var adInfo = data.filter(function (item) {

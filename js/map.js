@@ -9,8 +9,9 @@
   var mainPinSize = {};
   mainPinSize.width = dom.mainPin.getBoundingClientRect().width;
   mainPinSize.height = dom.mainPin.getBoundingClientRect().height;
-  mainPinSize.lowelLimitMove = mapSize.height - mainPinSize.height;
-  mainPinSize.rightLimitMove = mapSize.width - mainPinSize.width;
+  mainPinSize.lowelLimitMove = mapSize.height - markLocation.getPinHeight(dom.mainPin);
+  mainPinSize.rightLimitMove = mapSize.width - mainPinSize.width / 2;
+  mainPinSize.leftLimitMove = -(mainPinSize.width / 2);
   var makeIsActivate = function (collection) {
     for (var i = 0; i < collection.length; i++) {
       collection[i].removeAttribute('disabled');
@@ -38,8 +39,8 @@
       if (top > mainPinSize.lowelLimitMove) {
         top = mainPinSize.lowelLimitMove;
       }
-      if (left < 0) {
-        left = 0;
+      if (left < mainPinSize.leftLimitMove) {
+        left = mainPinSize.leftLimitMove;
       }
       if (left > mainPinSize.rightLimitMove) {
         left = mainPinSize.rightLimitMove;
