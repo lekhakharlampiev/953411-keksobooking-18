@@ -5,6 +5,7 @@
   var generated = window.generatedMarks;
   var data = [];
   var selected = 0;
+  var timeoutID;
 
   var getValue = {};
   getValue.selectValue = function (element) {
@@ -141,11 +142,16 @@
 
   var filterInputHandler = function () {
     selected = 0;
-    window.clearMaps();
-    var filterdData = maxSimilarAdds.getSimilarAdds();
-    var ads = generated.buildingMarks(filterdData);
-    dom.pinsMap.prepend(ads);
-    window.renderPinCards();
+    if (timeoutID) {
+      window.clearTimeout(timeoutID);
+    }
+    timeoutID = window.setTimeout(function () {
+      window.clearMaps();
+      var filterdData = maxSimilarAdds.getSimilarAdds();
+      var ads = generated.buildingMarks(filterdData);
+      dom.pinsMap.prepend(ads);
+      window.renderPinCards();
+    }, 500);
   };
   var addListener = function (elem) {
     elem.forEach(function (item) {
