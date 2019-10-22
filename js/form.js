@@ -1,6 +1,7 @@
 'use strict';
 (function () {
   var dom = window.domElements;
+  var load = window.load;
   var inputs = dom.inputs;
   var sendURL = 'https://js.dump.academy/keksobooking';
   var makeDisabled = window.makeDisabled;
@@ -80,12 +81,13 @@
     window.pageToInactive();
   };
   submitForm.error = function () {
-    dom.main.prepend(dom.errorMassege);
+    var massage = load.errorMassage();
+    dom.main.prepend(massage);
   };
   submitForm.submitHandler = function (evt) {
     evt.preventDefault();
     inputs.address.removeAttribute('disabled');
-    window.sendForm(sendURL, dom.form, submitForm.success, submitForm.error);
+    load.sendForm(sendURL, dom.form, submitForm.success, submitForm.error);
   };
   validation.settingMinPrice(inputs.type);
   dom.form.addEventListener('submit', submitForm.submitHandler);

@@ -1,6 +1,7 @@
 'use strict';
 (function () {
   var dom = window.domElements;
+  var load = window.load;
   var markLocation = window.markLocation;
   var generated = window.generatedMarks;
   window.data = [];
@@ -52,19 +53,8 @@
     },
   };
   var loading = {};
-  loading.closeButtonclickHandler = function (evt) {
-    evt.preventDefault();
-    var massage = dom.main.querySelector('.error');
-    massage.remove();
-  };
-  loading.errorMassage = function () {
-    var clone = dom.error.cloneNode(true);
-    var closeButton = clone.querySelector('.error__button');
-    closeButton.addEventListener('click', loading.closeButtonclickHandler);
-    return clone;
-  };
   loading.onError = function () {
-    var massage = loading.errorMassage();
+    var massage = load.errorMassage();
     dom.main.prepend(massage);
   };
   loading.onSuccess = function (data) {
@@ -87,7 +77,7 @@
     makeDisabled(dom.fieldsets);
   };
   window.pageToActive = function () {
-    window.unLoad(URL, loading.onSuccess, loading.onError);
+    load.unLoad(URL, loading.onSuccess, loading.onError);
   };
   window.clearMaps = stepsDeactivation.toClearMaps;
 })();
