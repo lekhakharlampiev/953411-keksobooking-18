@@ -4,13 +4,14 @@
   var filter = dom.filter;
   var generated = window.generatedMarks;
   var data = [];
+  var selected = 0;
 
   var getValue = {};
   getValue.selectValue = function (element) {
     var input = element;
-    var value = '';
-    if (value !== 'any') {
-      value = input.value;
+    var value = input.value;
+    if (value === 'any') {
+      value = '';
     }
     return value;
   };
@@ -24,10 +25,25 @@
   };
   getValue.getAllValueInputs = function () {
     var inputType = getValue.selectValue(filter.type);
+    if (inputType !== '') {
+      selected += 1;
+    }
     var inputPrice = getValue.selectValue(filter.price);
+    if (inputPrice !== '') {
+      selected += 1;
+    }
     var inputRooms = getValue.selectValue(filter.rooms);
+    if (inputRooms !== '') {
+      selected += 1;
+    }
     var inputGuest = getValue.selectValue(filter.guests);
+    if (inputGuest !== '') {
+      selected += 1;
+    }
     var inputsFeatures = getValue.checkboxValue();
+    if (inputsFeatures.length > 0) {
+      selected += 1;
+    }
     var filterValues = {
       type: inputType,
       price: inputPrice,
@@ -43,12 +59,11 @@
     var arr = rating.sort(function (a, b) {
       return a[0] - b[0];
     });
-    console.log(arr, 'arr');
     var count = 0;
     for (var i = arr.length - 1; i > 0; i--) {
       var next = arr[i - 1];
       var current = arr[i];
-      if (next[0] < current[0]) {
+      if (next[0] < current[0] || next[0] < selected) {
         count = i;
         break;
       }
@@ -65,8 +80,7 @@
     });
     return count;
   };
-  maxSimilarAdds.getElemRating = function (item, index) {
-    var filterValues = getValue.getAllValueInputs();
+  maxSimilarAdds.getElemRating = function (item, index, filterValues) {
     var rang = 0;
     var type = item.offer.type;
     var price = item.offer.price;
@@ -107,15 +121,15 @@
   maxSimilarAdds.getRating = function () {
     var interData = data;
     var rating = [];
+    var filterValues = getValue.getAllValueInputs();
     interData.forEach(function (elem, i) {
-      rating.push(maxSimilarAdds.getElemRating(elem, i));
+      rating.push(maxSimilarAdds.getElemRating(elem, i, filterValues));
     });
     var maxRatings = maxSimilarAdds.getMaxRatitg(rating);
     return maxRatings;
   };
   maxSimilarAdds.getSimilarAdds = function () {
     var maxrating = maxSimilarAdds.getRating();
-    console.log(maxrating);
     var adds = data;
     var filtredData = [];
     maxrating.forEach(function (elem) {
@@ -126,6 +140,7 @@
   };
 
   var filterInputHandler = function () {
+    selected = 0;
     window.clearMaps();
     var filterdData = maxSimilarAdds.getSimilarAdds();
     var ads = generated.buildingMarks(filterdData);
