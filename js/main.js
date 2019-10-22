@@ -52,8 +52,20 @@
     },
   };
   var loading = {};
+  loading.closeButtonclickHandler = function (evt) {
+    evt.preventDefault();
+    var massage = dom.main.querySelector('.error');
+    massage.remove();
+  };
+  loading.errorMassage = function () {
+    var clone = dom.error.cloneNode(true);
+    var closeButton = clone.querySelector('.error__button');
+    closeButton.addEventListener('click', loading.closeButtonclickHandler);
+    return clone;
+  };
   loading.onError = function () {
-    dom.main.prepend(window.errorMassege);
+    var massage = loading.errorMassage();
+    dom.main.prepend(massage);
   };
   loading.onSuccess = function (data) {
     var dataLoad = data;

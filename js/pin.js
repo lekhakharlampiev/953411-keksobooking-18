@@ -1,13 +1,6 @@
 'use strict';
 (function () {
   var dom = window.domElements;
-  var buildDomFragment = function (template) {
-    var fragment = new DocumentFragment();
-    var clone = template.cloneNode(true);
-    fragment.prepend(clone);
-    return fragment;
-  };
-
   var generatedMarks = {};
   generatedMarks.generatedTemplate = function (element) {
     var clonePin = dom.pin.cloneNode(true);
@@ -65,5 +58,4 @@
   markLocation.installPinAddress(dom.mainPin, false);
   window.markLocation = markLocation;
   window.generatedMarks = generatedMarks;
-  window.errorMassege = buildDomFragment(dom.error);
 })();
