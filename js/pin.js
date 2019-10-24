@@ -23,8 +23,8 @@
   markLocation.getMarkCoord = function (mark, active) {
     var markRect = mark.getBoundingClientRect();
     var parameters = {
-      markX: markRect.x,
-      markY: markRect.y,
+      markX: markRect.x + pageXOffset,
+      markY: markRect.y + pageYOffset,
       halfHeight: markRect.height / 2,
       halfWidth: markRect.width / 2,
       pinHeight: markLocation.getPinHeight(mark),
