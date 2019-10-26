@@ -43,7 +43,7 @@
     makeDisabled(inputs.guests);
     inputs.capacity.value = '';
     var options = inputs.guests;
-    var rooms = evt.target.value;
+    var rooms = inputs.rooms.value;
     var lastElement = options.length - 1;
     if (rooms === '100') {
       options[lastElement].removeAttribute('disabled');
@@ -89,6 +89,7 @@
     inputs.address.removeAttribute('disabled');
     load.sendForm(sendURL, dom.form, submitForm.success, submitForm.error);
   };
+  validation.inputRoomsChangeHandler();
   validation.settingMinPrice(inputs.type);
   dom.form.addEventListener('submit', submitForm.submitHandler);
   dom.formReset.addEventListener('click', buttonResetClickHandler);
