@@ -74,6 +74,7 @@
     stepsDeactivation.returnPinstartCoord();
     dom.map.classList.add('map--faded');
     dom.form.classList.add('ad-form--disabled');
+    markLocation.installPinAddress(dom.mainPin, false);
     makeDisabled(dom.fieldsets);
   };
   window.pageToActive = function () {
