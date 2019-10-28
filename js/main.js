@@ -72,7 +72,7 @@
     var dataLoad = data;
     window.data = dataLoad;
     var ads = generated.buildingMarks(data);
-    dom.pinsMap.prepend(ads);
+    dom.pinsMap.append(ads);
     dom.map.classList.remove('map--faded');
     dom.form.classList.remove('ad-form--disabled');
     window.renderPinCards();
