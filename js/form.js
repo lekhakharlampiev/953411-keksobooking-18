@@ -4,7 +4,6 @@
   var load = window.load;
   var inputs = dom.inputs;
   var sendURL = 'https://js.dump.academy/keksobooking';
-  var makeDisabled = window.makeDisabled;
   var validation = {};
   var pageInActive = window.pageToInactive;
   validation.settingMinPrice = function (elem) {

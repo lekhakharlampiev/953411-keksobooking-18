@@ -2,6 +2,7 @@
 (function () {
   var dom = window.domElements;
   var inputs = dom.inputs;
+  var filter = dom.filter;
   var load = window.load;
   var markLocation = window.markLocation;
   var generated = window.generatedMarks;
@@ -34,6 +35,16 @@
         elem.value = '';
       });
       inputs.description.value = '';
+    },
+    toCleanFilter: function () {
+      var selects = filter.selects;
+      var checkbox = filter.checkbox;
+      selects.forEach(function (select) {
+        select.value = 'any';
+      });
+      checkbox.forEach(function (chekbox) {
+        chekbox.checked = false;
+      });
     },
     toClearMaps: function () {
       var allPins = dom.pinsMap.querySelectorAll('.map__pin:not(.map__pin--main)');
@@ -70,6 +81,7 @@
   };
   window.pageToInactive = function () {
     stepsDeactivation.toClearInputs();
+    stepsDeactivation.toCleanFilter();
     stepsDeactivation.toClearMaps();
     stepsDeactivation.returnPinstartCoord();
     dom.map.classList.add('map--faded');
