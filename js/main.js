@@ -1,6 +1,7 @@
 'use strict';
 (function () {
   var dom = window.domElements;
+  var inputs = dom.inputs;
   var load = window.load;
   var markLocation = window.markLocation;
   var generated = window.generatedMarks;
@@ -18,22 +19,21 @@
     y: dom.mainPin.style.top
   };
   var stepsDeactivation = {
-    toClearInputs: function (container) {
-      container.forEach(function (element) {
-        var inputs = element.querySelectorAll('[name]');
-        var length = inputs.length;
-        if (length === 1) {
-          inputs[0].value = '';
-        }
-        if (length > 1) {
-          inputs.forEach(function (elem) {
-            if (elem.checked) {
-              elem.checked = false;
-            }
-            elem.value = '';
-          });
-        }
+    toClearInputs: function () {
+      inputs.title.value = '';
+      inputs.type.value = 'flat';
+      inputs.price.value = '';
+      inputs.price.setAttribute('placeholder', '1000');
+      inputs.rooms.value = '1';
+      window.inputRoomsChangeHandler();
+      inputs.capacity.value = '1';
+      inputs.timeIn.value = '12:00';
+      inputs.timeOut.value = '12:00';
+      inputs.checkbox.forEach(function (elem) {
+        elem.checked = false;
+        elem.value = '';
       });
+      inputs.description.value = '';
     },
     toClearMaps: function () {
       var allPins = dom.pinsMap.querySelectorAll('.map__pin:not(.map__pin--main)');
@@ -69,7 +69,7 @@
     window.startingFilter();
   };
   window.pageToInactive = function () {
-    stepsDeactivation.toClearInputs(dom.fieldsets);
+    stepsDeactivation.toClearInputs();
     stepsDeactivation.toClearMaps();
     stepsDeactivation.returnPinstartCoord();
     dom.map.classList.add('map--faded');

@@ -28,6 +28,7 @@
   domElements.fieldsets = domElements.form.querySelectorAll('fieldset');
   domElements.formReset = domElements.form.querySelector('.ad-form__reset');
   domElements.inputs = {};
+  domElements.inputs.title = domElements.form.querySelector('#title');
   domElements.inputs.address = domElements.form.querySelector('#address');
   domElements.inputs.type = domElements.form.querySelector('#type');
   domElements.inputs.price = domElements.form.querySelector('#price');
@@ -37,6 +38,8 @@
   domElements.inputs.rooms = domElements.form.querySelector('#room_number');
   domElements.inputs.capacity = domElements.form.querySelector('#capacity');
   domElements.inputs.guests = domElements.inputs.capacity.querySelectorAll('option');
-
+  domElements.inputs.features = domElements.form.querySelector('.features');
+  domElements.inputs.checkbox = domElements.inputs.features.querySelectorAll('input');
+  domElements.inputs.description = domElements.form.querySelector('#description');
   window.domElements = domElements;
 })();

@@ -39,23 +39,21 @@
       timein.value = time;
     }
   };
-  validation.inputRoomsChangeHandler = function (evt) {
-    makeDisabled(inputs.guests);
-    inputs.capacity.value = '';
-    var options = inputs.guests;
-    var rooms = inputs.rooms.value;
-    var lastElement = options.length - 1;
-    if (rooms === '100') {
-      options[lastElement].removeAttribute('disabled');
+  validation.inputRoomsChangeHandler = function () {
+    var guestsCount = inputs.rooms.value;
+    if (inputs.rooms.value === '100') {
+      guestsCount = 0;
     }
-    var isDiabled = function (number) {
-      for (var i = number; i < lastElement; i++) {
-        options[i].removeAttribute('disabled');
+    var guests = inputs.guests;
+    for (var i = 0; i < guests.length; i++) {
+      var element = guests[i];
+      var lastElement = guests[guests.length - 1];
+      element.setAttribute('disabled', 'disabled');
+      if (element.value <= guestsCount) {
+        element.removeAttribute('disabled');
       }
-    };
-    for (var i = 0; i < options.length; i++) {
-      if (rooms === options[i].value) {
-        isDiabled(i);
+      if (guestsCount !== 0) {
+        lastElement.setAttribute('disabled', 'disabled');
       }
     }
   };
@@ -89,6 +87,7 @@
     inputs.address.removeAttribute('disabled');
     load.sendForm(sendURL, dom.form, submitForm.success, submitForm.error);
   };
+  window.inputRoomsChangeHandler = validation.inputRoomsChangeHandler;
   validation.inputRoomsChangeHandler();
   validation.settingMinPrice(inputs.type);
   dom.form.addEventListener('submit', submitForm.submitHandler);
