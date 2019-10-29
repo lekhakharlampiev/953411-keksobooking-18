@@ -1,9 +1,10 @@
 'use strict';
 (function () {
-  var dom = window.domElements;
+  var DOM = window.domElements;
+
   var generatedMarks = {};
   generatedMarks.generatedTemplate = function (element) {
-    var clonePin = dom.pin.cloneNode(true);
+    var clonePin = DOM.pin.cloneNode(true);
     var img = clonePin.querySelector('img');
     clonePin.style.left = element.location.x + 25 + 'px';
     clonePin.style.top = element.location.y + 70 + 'px';
@@ -19,6 +20,7 @@
     }
     return fragment;
   };
+
   var markLocation = {};
   markLocation.getMarkCoord = function (mark, active) {
     var markRect = mark.getBoundingClientRect();
@@ -35,7 +37,7 @@
     return markCoordinate;
   };
   markLocation.getPinHeight = function (mark) { // высота главной метки состоит
-    var img = dom.mainPin.querySelector('img'); // из высоты картинки внутри  метки без отступов +
+    var img = DOM.mainPin.querySelector('img'); // из высоты картинки внутри  метки без отступов +
     var pinAfterStyle = getComputedStyle(mark, '::after'); // высота псевдоэлемента
     var imgHeight = img.clientHeight;
     var afterHeight = parseInt(pinAfterStyle.height, 10);
@@ -53,9 +55,11 @@
       left = x;
     }
     var value = left + ', ' + top;
-    dom.inputs.address.value = value;
+    DOM.inputs.address.value = value;
   };
-  markLocation.installPinAddress(dom.mainPin, false);
+
+  markLocation.installPinAddress(DOM.mainPin, false);
+
   window.markLocation = markLocation;
   window.generatedMarks = generatedMarks;
 })();

@@ -1,7 +1,8 @@
 'use strict';
 
 (function () {
-  var dom = window.domElements;
+  var DOM = window.domElements;
+
   var load = {};
   load.unLoad = function (url, onSuccess, onError) {
     var xhr = new XMLHttpRequest();
@@ -32,23 +33,24 @@
   };
   load.closeButtonClickHandler = function (evt) {
     evt.preventDefault();
-    var massage = dom.main.querySelector('.error');
+    var massage = DOM.main.querySelector('.error');
     massage.remove();
     document.removeEventListener('keydown', load.errorKeydownHandler);
   };
   load.errorKeydownHandler = function (evt) {
     if (evt.keyCode === 27) {
-      var massage = dom.main.querySelector('.error');
+      var massage = DOM.main.querySelector('.error');
       massage.remove();
     }
     document.removeEventListener('keydown', load.errorKeydownHandler);
   };
   load.errorMassage = function () {
-    var clone = dom.error.cloneNode(true);
+    var clone = DOM.error.cloneNode(true);
     var closeButton = clone.querySelector('.error__button');
     closeButton.addEventListener('click', load.closeButtonClickHandler);
     document.addEventListener('keydown', load.errorKeydownHandler);
     return clone;
   };
+
   window.load = load;
 })();

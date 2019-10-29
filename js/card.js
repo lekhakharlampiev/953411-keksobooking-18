@@ -1,29 +1,31 @@
 'use strict';
 (function () {
-  var dom = window.domElements;
+  var DOM = window.domElements;
+
   var newadCard = null;
   var data = [];
   var pinButtons = [];
 
+  // заполнение карточки объявления данными
   var getDrawAd = function (element) {
-    var clone = {};
-    clone.card = dom.adCard.cloneNode(true);
-    clone.avatar = clone.card.querySelector('.popup__avatar');
-    clone.title = clone.card.querySelector('.popup__title');
-    clone.address = clone.card.querySelector('.popup__text--address');
-    clone.price = clone.card.querySelector('.popup__text--price');
-    clone.type = clone.card.querySelector('.popup__type');
-    clone.capacity = clone.card.querySelector('.popup__text--capacity');
-    clone.checkTime = clone.card.querySelector('.popup__text--time');
-    clone.features = clone.card.querySelector('.popup__features');
-    clone.description = clone.card.querySelector('.popup__description');
-    clone.photos = clone.card.querySelector('.popup__photos');
-    clone.photo = clone.photos.querySelector('.popup__photo');
-    clone.close = clone.card.querySelector('.popup__close');
+    var Clone = {};
+    Clone.card = DOM.adCard.cloneNode(true);
+    Clone.avatar = Clone.card.querySelector('.popup__avatar');
+    Clone.title = Clone.card.querySelector('.popup__title');
+    Clone.address = Clone.card.querySelector('.popup__text--address');
+    Clone.price = Clone.card.querySelector('.popup__text--price');
+    Clone.type = Clone.card.querySelector('.popup__type');
+    Clone.capacity = Clone.card.querySelector('.popup__text--capacity');
+    Clone.checkTime = Clone.card.querySelector('.popup__text--time');
+    Clone.features = Clone.card.querySelector('.popup__features');
+    Clone.description = Clone.card.querySelector('.popup__description');
+    Clone.photos = Clone.card.querySelector('.popup__photos');
+    Clone.photo = Clone.photos.querySelector('.popup__photo');
+    Clone.close = Clone.card.querySelector('.popup__close');
     var closeClickHandler = function (evt) {
       evt.preventDefault();
-      clone.card.remove();
-      clone.close.removeEventListener('click', closeClickHandler);
+      Clone.card.remove();
+      Clone.close.removeEventListener('click', closeClickHandler);
     };
     var getTranslationType = function (type) {
       var translate = '';
@@ -44,34 +46,34 @@
       return translate;
     };
     var getPhotos = function (srcArr) {
-      clone.photo.remove();
+      Clone.photo.remove();
       srcArr.forEach(function (elem) {
-        var photo = clone.photo.cloneNode(true);
+        var photo = Clone.photo.cloneNode(true);
         photo.src = elem;
-        clone.photos.prepend(photo);
+        Clone.photos.prepend(photo);
       });
     };
     getPhotos(element.offer.photos);
     var typeOfHouse = getTranslationType(element.offer.type);
     var dataFeature = element.offer.features;
-    var features = clone.features.querySelectorAll('.popup__feature');
-    clone.close.addEventListener('click', closeClickHandler);
+    var features = Clone.features.querySelectorAll('.popup__feature');
+    Clone.close.addEventListener('click', closeClickHandler);
     features.forEach(function (elem) {
       var option = elem.getAttribute('class').slice(31);
       if (!dataFeature.includes(option)) {
         elem.remove();
       }
     });
-    newadCard = clone.card;
-    clone.avatar.src = element.author.avatar;
-    clone.title.textContent = element.offer.title;
-    clone.address.textContent = element.offer.address;
-    clone.price.firstChild.data = element.offer.price + '₽';
-    clone.type.textContent = typeOfHouse;
-    clone.capacity.textContent = element.offer.rooms + ' комнат(а)ы для ' + element.offer.guests + ' гост(я)ей';
-    clone.checkTime.textContent = 'Заезд после ' + element.offer.checkin + ', выезд до ' + element.offer.checkout;
-    clone.description.textContent = element.offer.description;
-    return clone.card;
+    newadCard = Clone.card;
+    Clone.avatar.src = element.author.avatar;
+    Clone.title.textContent = element.offer.title;
+    Clone.address.textContent = element.offer.address;
+    Clone.price.firstChild.data = element.offer.price + '₽';
+    Clone.type.textContent = typeOfHouse;
+    Clone.capacity.textContent = element.offer.rooms + ' комнат(а)ы для ' + element.offer.guests + ' гост(я)ей';
+    Clone.checkTime.textContent = 'Заезд после ' + element.offer.checkin + ', выезд до ' + element.offer.checkout;
+    Clone.description.textContent = element.offer.description;
+    return Clone.card;
   };
 
   var pinButtonClickhandler = function (evt) {
@@ -80,27 +82,30 @@
       return item.offer.title === title;
     });
     if (newadCard !== null) {
-      newadCard.remove();
+      newadCard.remove(); // если была открыта карточка то она удаляется
     }
     var adCard = getDrawAd(adInfo[0]);
-    dom.mapFilter.before(adCard);
+    DOM.mapFilter.before(adCard); // отрисовка карточки выбранного объявления
     document.addEventListener('keydown', escKeydownHandler);
   };
+
   var enterKeydownHandler = function (evtEnter) {
     if (evtEnter.keyCode === 13) {
       pinButtonClickhandler(evtEnter);
     }
     evtEnter.currentTarget.removeEventListener('keydown', enterKeydownHandler);
   };
+
   var escKeydownHandler = function (evt) {
     if (evt.keyCode === 27) {
       newadCard.remove();
     }
     document.removeEventListener('keydown', escKeydownHandler);
   };
+
   window.renderPinCards = function () {
-    data = window.data.slice();
-    pinButtons = dom.pinsMap.querySelectorAll('.map__pin:not(.map__pin--main)');
+    data = window.data;
+    pinButtons = DOM.pinsMap.querySelectorAll('.map__pin:not(.map__pin--main)');
     pinButtons.forEach(function (elem) {
       elem.addEventListener('click', pinButtonClickhandler);
       elem.addEventListener('keydown', enterKeydownHandler);

@@ -1,44 +1,48 @@
 'use strict';
 (function () {
-  var dom = window.domElements;
-  var inputs = dom.inputs;
-  var filter = dom.filter;
-  var load = window.load;
-  var markLocation = window.markLocation;
-  var generated = window.generatedMarks;
-  window.data = [];
+  var DOM = window.domElements;
+  var INPUTS = DOM.inputs;
+  var FILTER = DOM.filter;
+  var LOAD = window.load;
+  var MARK_LOCATION = window.markLocation;
+  var GENERATED = window.generatedMarks;
   var URL = 'https://js.dump.academy/keksobooking/data';
+
+  window.data = [];
+
   var makeDisabled = function (collection) {
     for (var i = 0; i < collection.length; i++) {
       collection[i].setAttribute('disabled', 'disabled');
     }
   };
-  makeDisabled(dom.fieldsets);
+
+  makeDisabled(DOM.fieldsets);
   window.makeDisabled = makeDisabled;
   var startCoord = {
-    x: dom.mainPin.style.left,
-    y: dom.mainPin.style.top
+    x: DOM.mainPin.style.left,
+    y: DOM.mainPin.style.top
   };
+
   var stepsDeactivation = {
     toClearInputs: function () {
-      inputs.title.value = '';
-      inputs.type.value = 'flat';
-      inputs.price.value = '';
-      inputs.price.setAttribute('placeholder', '1000');
-      inputs.rooms.value = '1';
+      INPUTS.title.value = '';
+      INPUTS.type.value = 'flat';
+      INPUTS.price.value = '';
+      INPUTS.price.setAttribute('placeholder', '1000');
+      INPUTS.rooms.value = '1';
       window.inputRoomsChangeHandler();
-      inputs.capacity.value = '1';
-      inputs.timeIn.value = '12:00';
-      inputs.timeOut.value = '12:00';
-      inputs.checkbox.forEach(function (elem) {
+      INPUTS.capacity.value = '1';
+      INPUTS.timeIn.value = '12:00';
+      INPUTS.timeOut.value = '12:00';
+      INPUTS.checkbox.forEach(function (elem) {
         elem.checked = false;
         elem.value = '';
       });
-      inputs.description.value = '';
+      INPUTS.description.value = '';
     },
     toCleanFilter: function () {
-      var selects = filter.selects;
-      var checkbox = filter.checkbox;
+      var selects = FILTER.selects;
+      var checkbox = FILTER.checkbox;
       selects.forEach(function (select) {
         select.value = 'any';
       });
@@ -47,7 +51,7 @@
       });
     },
     toClearMaps: function () {
-      var allPins = dom.pinsMap.querySelectorAll('.map__pin:not(.map__pin--main)');
+      var allPins = DOM.pinsMap.querySelectorAll('.map__pin:not(.map__pin--main)');
       var adCard = document.querySelector('.map__card');
       if (adCard) {
         adCard.remove();
@@ -59,38 +63,42 @@
     returnPinstartCoord: function () {
       var x = startCoord.x;
       var y = startCoord.y;
-      dom.mainPin.style.top = y;
-      dom.mainPin.style.left = x;
+      DOM.mainPin.style.top = y;
+      DOM.mainPin.style.left = x;
     },
   };
+
   var loading = {};
   loading.onError = function () {
-    var massage = load.errorMassage();
-    dom.main.prepend(massage);
+    var massage = DOM.errorMassage();
+    DOM.main.prepend(massage);
   };
   loading.onSuccess = function (data) {
     var dataLoad = data;
     window.data = dataLoad;
-    var ads = generated.buildingMarks(data);
-    dom.pinsMap.append(ads);
-    dom.map.classList.remove('map--faded');
-    dom.form.classList.remove('ad-form--disabled');
+    var ads = GENERATED.buildingMarks(data);
+    DOM.pinsMap.append(ads);
+    DOM.map.classList.remove('map--faded');
+    DOM.form.classList.remove('ad-form--disabled');
     window.renderPinCards();
-    markLocation.installPinAddress(dom.mainPin, true);
+    MARK_LOCATION.installPinAddress(DOM.mainPin, true);
     window.startingFilter();
   };
+  // переход страницы в неактивное состояние
   window.pageToInactive = function () {
     stepsDeactivation.toClearInputs();
     stepsDeactivation.toCleanFilter();
     stepsDeactivation.toClearMaps();
     stepsDeactivation.returnPinstartCoord();
-    dom.map.classList.add('map--faded');
-    dom.form.classList.add('ad-form--disabled');
-    markLocation.installPinAddress(dom.mainPin, false);
-    makeDisabled(dom.fieldsets);
+    DOM.map.classList.add('map--faded');
+    DOM.form.classList.add('ad-form--disabled');
+    MARK_LOCATION.installPinAddress(DOM.mainPin, false);
+    makeDisabled(DOM.fieldsets);
   };
+  // переход страницы в активное состояние
   window.pageToActive = function () {
-    load.unLoad(URL, loading.onSuccess, loading.onError);
+    LOAD.unLoad(URL, loading.onSuccess, loading.onError);
   };
+
   window.clearMaps = stepsDeactivation.toClearMaps;
 })();

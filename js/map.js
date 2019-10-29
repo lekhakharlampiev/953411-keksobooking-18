@@ -1,15 +1,17 @@
 'use strict';
 (function () {
-  var dom = window.domElements;
-  var markLocation = window.markLocation;
+  var DOM = window.domElements;
+  var MARK_LOCATION = window.markLocation;
+
   var mapSize = {
-    width: dom.map.getBoundingClientRect().width,
-    height: dom.map.getBoundingClientRect().height
+    width: DOM.map.getBoundingClientRect().width,
+    height: DOM.map.getBoundingClientRect().height
   };
+
   var mainPinSize = {};
-  mainPinSize.width = dom.mainPin.getBoundingClientRect().width;
-  mainPinSize.height = dom.mainPin.getBoundingClientRect().height;
-  mainPinSize.lowelLimitMove = mapSize.height - markLocation.getPinHeight(dom.mainPin);
+  mainPinSize.width = DOM.mainPin.getBoundingClientRect().width;
+  mainPinSize.height = DOM.mainPin.getBoundingClientRect().height;
+  mainPinSize.lowelLimitMove = mapSize.height - MARK_LOCATION.getPinHeight(DOM.mainPin);
   mainPinSize.rightLimitMove = mapSize.width - mainPinSize.width / 2;
   mainPinSize.leftLimitMove = -(mainPinSize.width / 2);
   var makeIsActivate = function (collection) {
@@ -17,20 +19,21 @@
       collection[i].removeAttribute('disabled');
     }
   };
+
   var mainPinMousedownHandler = function (evt) {
     evt.preventDefault();
-    if (dom.map.classList.contains('map--faded')) {
+    if (DOM.map.classList.contains('map--faded')) {
       window.pageToActive();
     }
-    makeIsActivate(dom.fieldsets);
+    makeIsActivate(DOM.fieldsets);
     var initialCoord = {
       x: evt.clientX,
       y: evt.clientY
     };
     var maimPinMouseMovehandler = function (moveEvt) {
       moveEvt.preventDefault();
-      var top = dom.mainPin.offsetTop;
-      var left = dom.mainPin.offsetLeft;
+      var top = DOM.mainPin.offsetTop;
+      var left = DOM.mainPin.offsetLeft;
       var moveTop = moveEvt.clientY;
       var moveLeft = moveEvt.clientX;
       if (top <= 0) {
@@ -55,9 +58,9 @@
       };
       var styleTop = (top - offset.y) + 'px';
       var styleLeft = (left - offset.x) + 'px';
-      markLocation.installPinAddress(dom.mainPin, true);
-      dom.mainPin.style.top = styleTop;
-      dom.mainPin.style.left = styleLeft;
+      MARK_LOCATION.installPinAddress(DOM.mainPin, true);
+      DOM.mainPin.style.top = styleTop;
+      DOM.mainPin.style.left = styleLeft;
     };
     var maimPinMouseUphandler = function (upEvt) {
       upEvt.preventDefault();
@@ -68,8 +71,9 @@
     document.addEventListener('mouseup', maimPinMouseUphandler);
 
   };
-  dom.mainPin.addEventListener('mousedown', mainPinMousedownHandler);
-  dom.mainPin.addEventListener('keydown', function (evt) {
+
+  DOM.mainPin.addEventListener('mousedown', mainPinMousedownHandler);
+  DOM.mainPin.addEventListener('keydown', function (evt) {
     if (evt.keyCode === 13) {
       mainPinMousedownHandler();
     }

@@ -1,10 +1,11 @@
 'use strict';
 (function () {
-  var dom = window.domElements;
-  var filter = dom.filter;
-  var generated = window.generatedMarks;
+  var DOM = window.domElements;
+  var FILTER = DOM.filter;
+  var GENERATED = window.generatedMarks;
+
   var data = [];
-  var selected = 0;
+  var selected = 0; // счетчик количества активных фильтров
   var timeoutID;
 
   var getValue = {};
@@ -17,7 +18,7 @@
     return value;
   };
   getValue.checkboxValue = function () {
-    var checked = filter.form.querySelectorAll('.map__checkbox:checked');
+    var checked = FILTER.form.querySelectorAll('.map__checkbox:checked');
     var values = [];
     checked.forEach(function (elem) {
       values.push(elem.value);
@@ -25,19 +26,19 @@
     return values;
   };
   getValue.getAllValueInputs = function () {
-    var inputType = getValue.selectValue(filter.type);
+    var inputType = getValue.selectValue(FILTER.type);
     if (inputType !== '') {
       selected += 1;
     }
-    var inputPrice = getValue.selectValue(filter.price);
+    var inputPrice = getValue.selectValue(FILTER.price);
     if (inputPrice !== '') {
       selected += 1;
     }
-    var inputRooms = getValue.selectValue(filter.rooms);
+    var inputRooms = getValue.selectValue(FILTER.rooms);
     if (inputRooms !== '') {
       selected += 1;
     }
-    var inputGuest = getValue.selectValue(filter.guests);
+    var inputGuest = getValue.selectValue(FILTER.guests);
     if (inputGuest !== '') {
       selected += 1;
     }
@@ -81,6 +82,7 @@
     });
     return count;
   };
+  // 1) создаем рейтин всех объявлений
   maxSimilarAdds.getElemRating = function (item, index, filterValues) {
     var rang = 0;
     var type = item.offer.type;
@@ -119,6 +121,7 @@
     var result = [rang, index];
     return result;
   };
+  // 2) отбираем элементы с максимальным рейтингом подходящим под все условия фильтра
   maxSimilarAdds.getRating = function () {
     var interData = data;
     var rating = [];
@@ -129,6 +132,7 @@
     var maxRatings = maxSimilarAdds.getMaxRatitg(rating);
     return maxRatings;
   };
+  // 3) отбираем объявления с максимальным рейтингом
   maxSimilarAdds.getSimilarAdds = function () {
     var maxrating = maxSimilarAdds.getRating();
     var adds = data;
@@ -148,19 +152,22 @@
     timeoutID = window.setTimeout(function () {
       window.clearMaps();
       var filterdData = maxSimilarAdds.getSimilarAdds();
-      var ads = generated.buildingMarks(filterdData);
-      dom.pinsMap.prepend(ads);
+      var ads = GENERATED.buildingMarks(filterdData);
+      DOM.pinsMap.prepend(ads);
       window.renderPinCards();
     }, 500);
   };
+
   var addListener = function (elem) {
     elem.forEach(function (item) {
       item.addEventListener('input', filterInputHandler);
     });
   };
+
+  // активаци фильтра при активации страницы
   window.startingFilter = function () {
-    addListener(filter.selects);
-    addListener(filter.checkbox);
+    addListener(FILTER.selects);
+    addListener(FILTER.checkbox);
     data = window.data;
   };
 })();
