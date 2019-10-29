@@ -14,18 +14,12 @@
   mainPinSize.lowelLimitMove = mapSize.height - MARK_LOCATION.getPinHeight(DOM.mainPin);
   mainPinSize.rightLimitMove = mapSize.width - mainPinSize.width / 2;
   mainPinSize.leftLimitMove = -(mainPinSize.width / 2);
-  var makeIsActivate = function (collection) {
-    for (var i = 0; i < collection.length; i++) {
-      collection[i].removeAttribute('disabled');
-    }
-  };
 
   var mainPinMousedownHandler = function (evt) {
     evt.preventDefault();
     if (DOM.map.classList.contains('map--faded')) {
       window.pageToActive();
     }
-    makeIsActivate(DOM.fieldsets);
     var initialCoord = {
       x: evt.clientX,
       y: evt.clientY

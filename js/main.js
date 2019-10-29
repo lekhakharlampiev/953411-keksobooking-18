@@ -10,19 +10,25 @@
 
   window.data = [];
 
-  var makeDisabled = function (collection) {
-    for (var i = 0; i < collection.length; i++) {
-      collection[i].setAttribute('disabled', 'disabled');
-    }
-  };
-
-  makeDisabled(DOM.fieldsets);
-  window.makeDisabled = makeDisabled;
-  var startCoord = {
+  var StartCoord = {
     x: DOM.mainPin.style.left,
     y: DOM.mainPin.style.top
   };
-
+  var stepsActivation = {
+    mainFormActivated: function () {
+      DOM.fieldsets.forEach(function (item) {
+        item.removeAttribute('disabled');
+      });
+    },
+    filterActivated: function () {
+      FILTER.selects.forEach(function (item) {
+        item.removeAttribute('disabled');
+      });
+      FILTER.checkbox.forEach(function (item) {
+        item.removeAttribute('disabled');
+      });
+    },
+  };
   var stepsDeactivation = {
     toClearInputs: function () {
       INPUTS.title.value = '';
@@ -30,7 +36,6 @@
       INPUTS.price.value = '';
       INPUTS.price.setAttribute('placeholder', '1000');
       INPUTS.rooms.value = '1';
-      window.inputRoomsChangeHandler();
       INPUTS.capacity.value = '1';
       INPUTS.timeIn.value = '12:00';
       INPUTS.timeOut.value = '12:00';
@@ -39,15 +44,20 @@
         elem.value = '';
       });
       INPUTS.description.value = '';
+      DOM.fieldsets.forEach(function (item) {
+        item.setAttribute('disabled', 'disabled');
+      });
     },
     toCleanFilter: function () {
       var selects = FILTER.selects;
       var checkbox = FILTER.checkbox;
       selects.forEach(function (select) {
         select.value = 'any';
+        select.setAttribute('disabled', 'disabled');
       });
-      checkbox.forEach(function (chekbox) {
-        chekbox.checked = false;
+      checkbox.forEach(function (check) {
+        check.checked = false;
+        check.setAttribute('disabled', 'disabled');
       });
     },
     toClearMaps: function () {
@@ -61,8 +71,8 @@
       });
     },
     returnPinstartCoord: function () {
-      var x = startCoord.x;
-      var y = startCoord.y;
+      var x = StartCoord.x;
+      var y = StartCoord.y;
       DOM.mainPin.style.top = y;
       DOM.mainPin.style.left = x;
     },
@@ -80,8 +90,11 @@
     DOM.pinsMap.append(ads);
     DOM.map.classList.remove('map--faded');
     DOM.form.classList.remove('ad-form--disabled');
+    stepsActivation.mainFormActivated();
+    stepsActivation.filterActivated();
     window.renderPinCards();
     MARK_LOCATION.installPinAddress(DOM.mainPin, true);
+    window.inputRoomsChangeHandler();
     window.startingFilter();
   };
   // переход страницы в неактивное состояние
@@ -93,8 +106,8 @@
     DOM.map.classList.add('map--faded');
     DOM.form.classList.add('ad-form--disabled');
     MARK_LOCATION.installPinAddress(DOM.mainPin, false);
-    makeDisabled(DOM.fieldsets);
   };
+  window.pageToInactive();
   // переход страницы в активное состояние
   window.pageToActive = function () {
     LOAD.unLoad(URL, loading.onSuccess, loading.onError);

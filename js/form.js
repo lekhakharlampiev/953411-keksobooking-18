@@ -40,7 +40,10 @@
       timein.value = time;
     }
   };
-  validation.inputRoomsChangeHandler = function () {
+  validation.inputRoomsChangeHandler = function (evt) {
+    if (evt) {
+      INPUTS.capacity.value = '';
+    }
     var guestsCount = INPUTS.rooms.value;
     if (INPUTS.rooms.value === '100') {
       guestsCount = 0;
@@ -81,7 +84,7 @@
     DOM.main.prepend(DOM.success);
     document.addEventListener('click', successClickHandler);
     document.addEventListener('keydown', successKeydownHandler);
-    window.pageToInactive();
+    pageInActive();
   };
   submitForm.error = function () {
     var massage = LOAD.errorMassage();
@@ -92,7 +95,6 @@
     INPUTS.address.removeAttribute('disabled');
     LOAD.sendForm(SEND_URL, DOM.form, submitForm.success, submitForm.error);
   };
-
   window.inputRoomsChangeHandler = validation.inputRoomsChangeHandler;
   validation.inputRoomsChangeHandler();
   validation.settingMinPrice(INPUTS.type);
