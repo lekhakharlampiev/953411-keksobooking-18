@@ -1,6 +1,8 @@
 'use strict';
 (function () {
   var DOM = window.domElements;
+  var BOTTOM_LIMIT = 630;
+  var TOP_LIMIT = 130;
 
   var generatedMarks = {};
   generatedMarks.generatedTemplate = function (element) {
@@ -50,11 +52,11 @@
     var y = Math.floor(coordinate.y);
     var x = Math.floor(coordinate.x);
     var top = y;
-    if (y < 130) {
-      top = 130;
+    if (y < TOP_LIMIT) {
+      top = TOP_LIMIT;
     }
-    if (y > 630) {
-      top = 630;
+    if (y > BOTTOM_LIMIT) {
+      top = BOTTOM_LIMIT;
     }
     var left = x;
     var value = left + ', ' + top;
