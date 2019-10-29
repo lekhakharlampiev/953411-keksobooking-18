@@ -76,7 +76,7 @@
     return Clone.card;
   };
 
-  var pinButtonClickhandler = function (evt) {
+  var pinButtonClickHandler = function (evt) {
     var title = evt.currentTarget.firstElementChild.getAttribute('alt');
     var adInfo = data.filter(function (item) {
       return item.offer.title === title;
@@ -91,7 +91,7 @@
 
   var enterKeydownHandler = function (evtEnter) {
     if (evtEnter.keyCode === 13) {
-      pinButtonClickhandler(evtEnter);
+      pinButtonClickHandler(evtEnter);
     }
     evtEnter.currentTarget.removeEventListener('keydown', enterKeydownHandler);
   };
@@ -107,7 +107,7 @@
     data = window.data;
     pinButtons = DOM.pinsMap.querySelectorAll('.map__pin:not(.map__pin--main)');
     pinButtons.forEach(function (elem) {
-      elem.addEventListener('click', pinButtonClickhandler);
+      elem.addEventListener('click', pinButtonClickHandler);
       elem.addEventListener('keydown', enterKeydownHandler);
     });
   };
