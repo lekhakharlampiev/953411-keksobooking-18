@@ -42,6 +42,7 @@
     var imgHeight = img.clientHeight;
     var afterHeight = parseInt(pinAfterStyle.height, 10);
     var pinHeight = afterHeight + imgHeight;
+    window.mainPinHeigth = pinHeight;
     return pinHeight;
   };
   markLocation.installPinAddress = function (pinMap, active) {
@@ -49,16 +50,17 @@
     var y = Math.floor(coordinate.y);
     var x = Math.floor(coordinate.x);
     var top = y;
-    var left = x;
-    if (active) {
-      top = y;
-      left = x;
+    if (y < 130) {
+      top = 130;
     }
+    if (y > 630) {
+      top = 630;
+    }
+    var left = x;
     var value = left + ', ' + top;
     DOM.inputs.address.value = value;
   };
 
-  markLocation.installPinAddress(DOM.mainPin, false);
 
   window.markLocation = markLocation;
   window.generatedMarks = generatedMarks;

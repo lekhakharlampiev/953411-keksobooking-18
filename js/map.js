@@ -2,7 +2,9 @@
 (function () {
   var DOM = window.domElements;
   var MARK_LOCATION = window.markLocation;
-
+  var MARK_HEIGHT = window.mainPinHeigth;
+  var BOTTOM_LIMIT = 630;
+  var TOP_LIMIT = 130;
   var mapSize = {
     width: DOM.map.getBoundingClientRect().width,
     height: DOM.map.getBoundingClientRect().height
@@ -11,7 +13,8 @@
   var mainPinSize = {};
   mainPinSize.width = DOM.mainPin.getBoundingClientRect().width;
   mainPinSize.height = DOM.mainPin.getBoundingClientRect().height;
-  mainPinSize.lowelLimitMove = mapSize.height - MARK_LOCATION.getPinHeight(DOM.mainPin);
+  mainPinSize.topLimitMove = TOP_LIMIT - MARK_HEIGHT;
+  mainPinSize.bottomLimitMove = BOTTOM_LIMIT - MARK_HEIGHT;
   mainPinSize.rightLimitMove = mapSize.width - mainPinSize.width / 2;
   mainPinSize.leftLimitMove = -(mainPinSize.width / 2);
 
@@ -30,11 +33,11 @@
       var left = DOM.mainPin.offsetLeft;
       var moveTop = moveEvt.clientY;
       var moveLeft = moveEvt.clientX;
-      if (top <= 0) {
-        top = 0;
+      if (top <= mainPinSize.topLimitMove) {
+        top = mainPinSize.topLimitMove;
       }
-      if (top > mainPinSize.lowelLimitMove) {
-        top = mainPinSize.lowelLimitMove;
+      if (top >= mainPinSize.bottomLimitMove) {
+        top = mainPinSize.bottomLimitMove;
       }
       if (left < mainPinSize.leftLimitMove) {
         left = mainPinSize.leftLimitMove;
